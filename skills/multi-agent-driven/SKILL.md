@@ -25,6 +25,7 @@ Turn the current task into a coordinated multi-agent run. You stay the orchestra
 
 ## Rules
 
+- Default to the strongest available model tier for substantive subagent work (opus-high / sonnet-max / xhigh-class); drop to a cheaper tier only for trivial mechanical stages. Name the tier explicitly in the dispatch.
 - Decomposition follows context coupling: subtasks that need each other's intermediate context stay in one agent; only genuinely independent slices get separate agents. When in doubt, fewer agents.
 - Every fan-out states its coverage: what was included, what was dropped. No silent truncation.
 - Subagent results are claims, not facts. Verify before integrating: rerun the test, reopen the file, recheck the quote.
