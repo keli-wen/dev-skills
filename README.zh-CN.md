@@ -2,7 +2,7 @@
 
 [English README](./README.md)
 
-我日常在用的 agent skills，组织方式参考 [mattpocock/skills](https://github.com/mattpocock/skills)。其中 `lowband` 是特色：**低认知带宽下的人机协作**，agent 的工作能力不降级，但呈现方式、提问方式和决策路由对齐人当下的状态。
+我日常在用的 agent skills，组织方式参考 [mattpocock/skills](https://github.com/mattpocock/skills)。
 
 ## 安装
 
@@ -14,13 +14,13 @@ Claude Code 里用 `/lowband` 调用，Codex 里用 `$lowband`，其余 skill �
 
 ## Skills
 
-| Skill | 状态 | 一句话 |
-|---|---|---|
-| `lowband` | ✅ 可用 | 低带宽模式：只给驾驶舱信息，决策做成带推荐项的二选一 |
-| `handoff` | ✅ 可用 | 最小充分交接：把任务压缩到下一个 agent 能直接开工 |
-| `multi-agent-driven` | ✅ 可用 | 按任务类型把当前任务派发给多个 subagent |
-| `ctx-research` | ✅ 可用 | 基于项目 contexts 的深度研究，结论写回 context 体系 |
-| `grill-with-ctx` | 🤔 设计中 | 带上下文、按优先级的追问，设计笔记见英文 README |
+| 什么时候用 | 用哪个 |
+|---|---|
+| 脑力耗尽但工作还得推进：agent 只给驾驶舱信息，决策做成带推荐项的二选一 | `lowband` |
+| 把当前任务交给另一个 agent / session，让它不重复事实源、直接开工 | `handoff` |
+| 想把当前任务按类型拆给多个 subagent 并行推进 | `multi-agent-driven` |
+| 需要从项目已有 contexts 出发做深度研究，验证过的结论写回去 | `ctx-research` |
+| 想被带着上下文、按重要性排序地追问方案 | `grill-with-ctx`（🤔 设计中） |
 
 ## 设计约定
 

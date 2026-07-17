@@ -2,7 +2,7 @@
 
 [中文版 README](./README.zh-CN.md)
 
-The agent skills I use day to day, organized after [mattpocock/skills](https://github.com/mattpocock/skills). The flagship is `lowband`: **human-agent collaboration under low cognitive bandwidth** — the agent's capability never degrades; its presentation, questioning, and decision routing adapt to the human's current state.
+The agent skills I use day to day, organized after [mattpocock/skills](https://github.com/mattpocock/skills).
 
 ## Install
 
@@ -14,13 +14,13 @@ Invoke with `/lowband` in Claude Code, `$lowband` in Codex (same for the other s
 
 ## Skills
 
-| Skill | Status | One-liner |
-|---|---|---|
-| `lowband` | ✅ ready | Low-bandwidth mode: cockpit-only reporting, decisions become two-option questions with a recommendation |
-| `handoff` | ✅ ready | Minimal-sufficient handoff: compress the task so the next agent can start directly |
-| `multi-agent-driven` | ✅ ready | Type-aware dispatch of the current task to multiple subagents |
-| `ctx-research` | ✅ ready | Deep research grounded in the project's context system, findings filed back |
-| `grill-with-ctx` | 🤔 design open | Context-grounded, priority-aware grilling — see design notes below |
+| When you… | Use |
+|---|---|
+| are mentally drained but need the work to keep moving — the agent reports cockpit-style and turns decisions into two-option questions with a recommendation | `lowband` |
+| hand the current task to another agent or session and want it to start directly, without duplicated sources of truth | `handoff` |
+| want the current task fanned out to several subagents, with the pattern chosen by task type | `multi-agent-driven` |
+| need deep research that starts from your project's existing contexts and files verified findings back into them | `ctx-research` |
+| want to be interrogated about a plan, context-aware and important-questions-first | `grill-with-ctx` (🤔 design open, see notes below) |
 
 ## Design conventions
 
