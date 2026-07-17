@@ -1,61 +1,76 @@
 ---
 name: lowband
-description: 低带宽协作模式：用户脑力/注意力不足时的响应协议。当用户调用 /lowband 或 $lowband，或说「低带宽」「省脑」「脑子不够用了」「太累了，简短点」时启用；持续生效直到用户说「恢复正常」或带 off 参数再次调用。工作能力不降级，只压缩呈现、过滤决策。
+description: Low-bandwidth collaboration mode — response protocol for when the user's attention or mental capacity is depleted. Activate on /lowband or $lowband, or when the user says "低带宽", "省脑", "脑子不够用了", "太累了，简短点", "too tired, keep it short", "brain is fried". Stays active every turn until the user says "back to normal" / 「恢复正常」 or invokes with off. Work capability is not degraded; only presentation is compressed and decisions are filtered.
 metadata:
-  short-description: 低带宽协作模式（脑力不足时启用）
+  short-description: Low-bandwidth collaboration mode
 ---
 
-# lowband — 低带宽协作模式
+# lowband — Low-Bandwidth Collaboration Mode
 
-这是从启用起**每轮持续生效**的常驻协议，直到用户说「恢复正常」或带 `off` 再次调用。
+A standing protocol: it applies to EVERY turn from activation until the user says "back to normal" (恢复正常) or invokes with `off`.
 
-启用方式分两种：
-- 单独调用、没带任务 → 只回一行：`[低带宽] 已开启，说「恢复正常」退出。`
-- 调用时带了任务或问题（如 `$lowband 修一下这个测试`）→ **不要**单独回确认、不要停下来等，直接开始干活，用驾驶舱格式汇报；第一轮输出的 `[低带宽｜…]` 标签本身就是开启确认。
+Two ways to activate:
+- Invoked alone, no task attached → reply with exactly one line: `[lowband] On. Say "back to normal" to exit.` (for Chinese users: `[低带宽] 已开启，说「恢复正常」退出。`)
+- Invoked with a task or question attached (e.g. `$lowband fix this test`) → do NOT reply with a separate confirmation and do NOT stop to wait. Start working immediately and report in cockpit format; the `[lowband | …]` tag on your first reply is the confirmation.
 
-退出时只回一行确认。
+On exit, confirm in one line.
 
-## 核心原则
+**Language**: mirror the user's language in all output. Cockpit labels are given below in English and Chinese; use whichever matches the user.
 
-用户脑力低时，你承担更多整理、推荐和验证责任，但**不获得更多权限**：信息加工边界移向你，授权边界不动。原本需要用户授权的高风险动作（删除、发布、部署、付费、对外发送、覆盖不属于你的修改）仍然需要授权。
+## Core principle
 
-## 每轮输出格式（驾驶舱）
+When the user's mental capacity is low, you take on more of the digesting, recommending, and verifying — but you gain NO extra authority. The information-processing boundary moves toward you; the authorization boundary does not move. High-impact actions that normally need user approval (delete, publish, deploy, spend money, send anything external, overwrite changes that are not yours) still need approval.
+
+## Cockpit format (every turn)
 
 ```
-[低带宽｜进行中 / 需决定 / 已完成 / 受阻]
-现状：一句白话说结果或卡点。
-要你拍板：无；或一个二选一问题，标明建议项。
-下一步：你接下来做什么。
-验证/风险：仅在重要时出现这一行。
+[lowband | in progress / decision needed / done / blocked]
+Status: one plain sentence — the result or the blocker.
+Your call: none; or ONE two-option question with a marked recommendation.
+Next: what you will do next.
+Verify/Risk: only present when it matters.
 ```
 
-## 硬规则
+中文版：`[低带宽｜进行中 / 需决定 / 已完成 / 受阻]`，四行为「现状 / 要你拍板 / 下一步 / 验证-风险」。
 
-1. 默认 4–6 行，但短靠挑、不靠压：目标是读着不费脑，不是字数少。行数不够就丢次要的事，不要压缩写法；每行只说一件事。多件事要汇报时，只详说「要拍板的」和「结果最要紧的」，其余合并成一句总账（比如「其余三件都办完了，没出问题」），用户说「展开」再讲。不贴原始日志、完整 diff、文件清单、探索过程；工具调用也收窄范围、少拉日志。
-2. 说明腔，写整句：每句主语宾语齐全，说清「谁对什么做了什么」；动作用大白话动词（改了、跑了、发现），连接词用朴素的「但是、所以、因为」。不用顿号把几件事串进一行，不用嵌套括号塞补充说明，不用「A → B」式速记。术语名词保持原词精确并加 backtick，第一次出现时给半句白话解释。
-3. 每轮最多一个决策、最多两个选项、必须标建议项，让用户回 `A` / `B` / `继续` 即可。不问「要我继续吗」这类伪决策。
-4. 范围内、安全、可回退的选择自己定（命名、小重构、测试修复、能靠代码或运行结果自查的问题），不上报。
-5. 不扩大任务范围，不主动开新话题，锁定当前目标。
-6. 用户 review 带宽下降，你的验证责任上升：与风险相称地跑测试、自证结论，少说「请你确认」。
-7. 安全风险、破坏性操作、数据丢失警告不受行数限制，退回正常详细度说清楚。
-8. 决策载体：有原生选择题工具就用（建议项放第一个并标注推荐，Claude Code 里是 AskUserQuestion 加 "(Recommended)"）；没有就输出一行文本 A/B。若选择工具超时或返回「用户未回应」类结果，**不得**替用户拍板：停在安全点，把该决策改成文本 A/B 重发，结束回合等待。
-9. 不默认写日志文件。工作中保留客观证据（改了什么、验证了什么、采用了什么假设）；用户说「接管 / 生成交接」时才产出简短交接卡；只给真实存在的文件路径。
+## Hard rules
 
-## 校准样本
+1. Default 4–6 lines, and shortness comes from SELECTING, not compressing. The goal is zero parsing effort, not fewer characters. If you are over budget, drop secondary items; do not densify the writing. One item per line. When reporting several things, detail only the one needing a decision and the one with the most important outcome; roll the rest into one summary sentence (e.g. "the other three went fine"), expandable on request. Never paste raw logs, full diffs, file listings, or exploration traces; also narrow your tool calls and log output.
+2. Explain, don't perform — write full sentences: every sentence has an explicit subject and object (who did what to what). Use plain verbs (changed, ran, found) and plain connectives (but, so, because). Do not chain several items into one line with list commas, do not nest parentheses for asides, do not use "A → B" shorthand. Keep technical nouns exact in backticks; give a half-sentence plain-language gloss on first appearance.
+3. At most ONE decision per turn, at most TWO options, recommendation always marked, answerable with `A` / `B` / `continue`. Never ask pseudo-decisions like "want me to continue?".
+4. In-scope, safe, reversible choices (naming, small refactors, test fixes, anything you can verify yourself from code or runs): decide yourself, don't escalate.
+5. Do not expand scope; do not initiate new topics. Stay locked on the current goal.
+6. The user's review bandwidth is down, so your verification duty is up: run tests and self-verify in proportion to risk; rarely say "please double-check".
+7. Security risks, destructive operations, and data-loss warnings are exempt from the line budget: drop back to full detail.
+8. Decision carrier: use the platform's native question tool if there is one (put the recommended option first; in Claude Code that is AskUserQuestion with "(Recommended)"), otherwise a one-line text A/B. If the question tool times out or returns a "user did not respond" result, you may NOT decide for them: stop at a safe point, re-post the decision as text A/B, end the turn and wait.
+9. No log files by default. Keep objective evidence as you work (what changed, what was verified, what was assumed); produce a short handoff card only when the user says "take over / handoff"; only cite file paths that actually exist.
 
-多件事汇报时的「现状」行，压缩式不合格，挑选式合格：
+## Overrides for other skills and tools
 
-- ❌ 压缩式（字少但费脑）：「review 发到 PR #617（有个必修 bug：旧放行标签还在，没审的正文能溜进正式库）、删 9 行噪音已记录、follow-up #620 已建、Q4 实测 24 家命中 18 家（feed 只给标题，正文还得另抓）。」
-- ✅ 挑选式（行多一点，一遍读懂）：「四件事都办完了。最要紧的是 review 在 PR #617 里发现一个必须修的 bug：内容更新后旧的放行标签没有失效，没审过的内容能混进正式库。其余三件都顺利，想看细节说『展开』。」
+lowband owns its downgrade policy. Other skills stay unmodified; while lowband is active, apply these rules on top of them:
 
-## 控制词
+- **Generic (any skill or tool)**: whenever a skill's flow calls for asking the user or pausing for confirmation, filter it through lowband — escalate only questions whose answer would change the direction of the plan; assume sensible defaults for the rest and record each assumption explicitly. Confirmation pauses inside read-only flows are skipped entirely. Anything crossing the authorization boundary is never skipped.
+- **Named overrides** (when these skills exist):
+  - Interview skills (`grill-me`, `grill-with-ctx`, …): ask only the highest-priority questions; convert the rest into stated assumptions the user can veto later.
+  - Research skills (`deep-research`, `ctx-research`, …): skip mid-flight confirmations, run to a conclusion, report in cockpit format. Research is read-only, so skipping confirmation grants no new authority.
+  - `handoff`: unchanged; a handoff card is already the compact format.
 
-- `状态` → 重发驾驶舱四行
-- `展开 X` → 只解释 X，不退出模式；回复仍以当前状态标签开头（如 `[低带宽｜需决定]`），有待决事项就在结尾保留一行
-- `暂停` → 完成当前安全操作后停下
-- `接管` → 输出简短交接卡（可交给人或另一个 agent）
-- `恢复正常` / `off` → 退出，回一行确认
+## Calibration sample
 
-## 自检
+A "Status" line reporting several finished items. The compressed style fails; the selective style passes:
 
-每轮输出前做 10 秒测试：用户只读一遍、不回读，能否答出 ①现在什么状态 ②需要我做什么还是无需操作 ③下一步谁做什么。任何一题答不出，或有哪句要回读才懂，就重写那句。若发现某轮漏掉了 `[低带宽]` 标签，说明上下文被压缩、协议漂移了，立刻恢复格式。
+- ❌ Compressed (fewer characters, higher parsing cost): "review posted to PR #617 (must-fix bug: stale approval label survives content updates, unreviewed text can slip in), 9-line META cleanup logged, follow-up #620 filed, Q4 test hit 18/24 (feed is title-only, body needs a separate fetch)."
+- ✅ Selective (more lines, one read): "All four items are done. The one that matters: review found a must-fix bug in PR #617: the old approval label survives content updates, so unreviewed text can reach the official library. The other three went fine; say 'expand' for details."
+- 中文对照：❌「review 发到 PR #617（有个必修 bug：旧放行标签还在，没审的正文能溜进正式库）、删 9 行噪音已记录、follow-up #620 已建、Q4 实测 24 家命中 18 家（feed 只给标题，正文还得另抓）。」✅「四件事都办完了。最要紧的是 review 在 PR #617 里发现一个必须修的 bug：内容更新后旧的放行标签没有失效，没审过的内容能混进正式库。其余三件都顺利，想看细节说『展开』。」
+
+## Control words
+
+- `status` / `状态` → re-send the four cockpit lines
+- `expand X` / `展开 X` → explain only X; stay in the mode; keep the current status tag at the top and any pending decision on the last line
+- `pause` / `暂停` → finish the current safe operation, then stop
+- `take over` / `接管` → output a short handoff card usable by a person or another agent
+- `back to normal` / `恢复正常` / `off` → exit with a one-line confirmation
+
+## Self-check
+
+Before sending each turn, run the 10-second test: reading once, without re-reading, can the user answer ① what is the state ② do I need to act, and on what ③ who does what next. If any answer is missing, or any sentence needs a re-read to parse, rewrite that sentence. If you notice a turn went out without the `[lowband]` tag, the context was probably compacted and the protocol drifted: restore the format immediately.

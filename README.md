@@ -1,47 +1,55 @@
 # Keli's Agent Skills
 
-个人 agent skills 仓库，组织方式参考 [mattpocock/skills](https://github.com/mattpocock/skills)。核心主题：**低认知带宽下的人机协作**。agent 的工作能力不降级，但呈现方式、提问方式和决策方式要对齐我当下的状态。
+[中文版 README](./README.zh-CN.md)
 
-## 安装
+Personal agent skills, organized after [mattpocock/skills](https://github.com/mattpocock/skills). Theme: **human-agent collaboration under low cognitive bandwidth** — the agent's capability never degrades; its presentation, questioning, and decision routing adapt to the human's current state.
+
+## Install
 
 ```bash
 npx skills@latest add keli-wen/skills
 ```
 
-Claude Code 里用 `/lowband` 调用，Codex 里用 `$lowband`。
+Invoke with `/lowband` in Claude Code, `$lowband` in Codex (same for the other skills).
 
 ## Skills
 
-| Skill | 状态 | 一句话 |
+| Skill | Status | One-liner |
 |---|---|---|
-| `lowband` | ✅ 可用 | 低带宽协作模式：脑力不足时 agent 只给驾驶舱信息，决策做成带推荐项的选择题 |
-| `handoff` | 🚧 规划中 | 最小充分交接：把当前任务打包给下一个 agent / session |
-| `multi-agent-driven` | 🚧 规划中 | 按任务类型把当前任务拆给多个 subagent，用 handoff 做派发契约 |
-| `ctx-research` | 🚧 规划中 | 基于项目 contexts 和我的需求做多智能体深度研究 |
-| `grill-with-ctx` | 🚧 规划中 | 带上下文、按优先级的追问：先读 ctx 再问，只问 ctx 答不了的，重要的先问 |
+| `lowband` | ✅ ready | Low-bandwidth mode: cockpit-only reporting, decisions become two-option questions with a recommendation |
+| `handoff` | ✅ ready | Minimal-sufficient handoff: compress the task so the next agent can start directly |
+| `multi-agent-driven` | ✅ ready | Type-aware dispatch of the current task to multiple subagents |
+| `ctx-research` | ✅ ready | Deep research grounded in the project's context system, findings filed back |
+| `grill-with-ctx` | 🤔 design open | Context-grounded, priority-aware grilling — see design notes below |
 
-## 设计约定
+## Design conventions
 
-### lowband 是横切模式，不是普通 skill
+### lowband is a cross-cutting mode, and it owns its overrides
 
-lowband 开启后是常驻协议。因为它和其他 skill 的指令同时在上下文里，其他 skill 可以声明一段「lowband 适配」，在低带宽下改变自己的行为：
+Direction matters: other skills stay unmodified (they may be third-party and not editable), and lowband itself carries the downgrade policy — a generic question filter that applies to any skill, plus named overrides for known ones. See "Overrides for other skills and tools" in [`skills/lowband/SKILL.md`](./skills/lowband/SKILL.md).
 
-- `grill-with-ctx`：只问高优先级问题，其余自己 assume，并把假设显式记下来
-- `ctx-research`：跳过中间确认，直接跑完给结论（研究是只读的，跳过确认不越权）
+Hard boundary: **lowband reduces interruptions; it never expands authorization.** Deleting, publishing, deploying, spending, and sending anything external need explicit user approval in every mode.
 
-硬边界：**lowband 降低打扰，不扩大授权**。删除、发布、部署、对外发送这类动作，任何模式下都要用户拍板。
+### Dependency direction (after Matt)
 
-### grill-with-ctx 设计笔记
+User-invoked skills may use model-invoked ones; sideways and upward calls are not allowed, which prevents loops. Current graph: `ctx-research` → `multi-agent-driven` → `handoff`.
 
-Matt 仓库里的 grill 是三件套，不是两层：`grilling` 是可复用的追问引擎（model-invoked），`grill-me` 是通用入口（问任何话题，问完不留东西），`grill-with-docs` 是工程特化入口（边问边把敲定的结论写进 `CONTEXT.md` 和 ADR）。分层的真实理由是：入口决定「问完之后留下什么」。
+### Bilingual policy
 
-我的项目已经有自己的持久层（`contexts/` 体系），所以两个入口可以合成一个 `grill-with-ctx`：
+SKILL.md instructions are written in English (they are read by models and an international audience). Every skill mirrors the user's language at runtime, and lowband ships its cockpit template and calibration samples in both English and Chinese. READMEs: this file (EN) and [README.zh-CN.md](./README.zh-CN.md) (中文).
 
-1. **先读再问**：追问前先读相关 contexts，凡是 contexts 已经回答的不问
-2. **priority-aware**：问题按「答案会不会改变方案方向」排序，重要的先问；边际价值明显下降就停，不追求穷尽（Matt 的版本没有做优先级，这是主要差异点）
-3. **写回**：问出来的决策落回 contexts，下次不再问
-4. **lowband 适配**：只问 P0，P1 以下自己 assume 并输出假设清单
+### grill-with-ctx — design notes (open)
 
-### 组合规则（借自 Matt）
+Matt's grilling is three pieces, not two: `grilling` (a reusable interview engine, model-invoked), `grill-me` (a generic entry that leaves nothing behind), and `grill-with-docs` (an engineering entry that writes ADRs and the domain model as it goes). The real reason for the split is **what a session leaves behind**, not "with or without context".
 
-用户调用的 skill 可以调 model-invoked 的 skill；反向和平级互调都不允许，避免循环。依赖方向：`ctx-research` → `multi-agent-driven` → `handoff`。
+My projects already have a durable layer (a `contexts/` system), so the plan is to merge the entries into one `grill-with-ctx`:
+
+1. **Read before asking**: read the relevant contexts first; never ask what they already answer.
+2. **Priority-aware**: rank questions by "would the answer change the plan's direction"; ask the important ones first, stop when marginal value clearly drops (Matt's version has no prioritization — this is the main difference).
+3. **Write back**: decisions produced by the session land in contexts, so they are never asked again.
+
+Open questions before implementing:
+
+- Is "read ctx before asking" a grill feature, or a property every skill here should have?
+- What exactly writes back, and in what form — decision records, assumption lists, or both?
+- Where is the stop line between "grill until every branch is resolved" (Matt) and "stop at diminishing returns" (mine)?
