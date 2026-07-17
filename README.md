@@ -2,7 +2,7 @@
 
 [中文版 README](./README.zh-CN.md)
 
-Personal agent skills, organized after [mattpocock/skills](https://github.com/mattpocock/skills). Theme: **human-agent collaboration under low cognitive bandwidth** — the agent's capability never degrades; its presentation, questioning, and decision routing adapt to the human's current state.
+The agent skills I use day to day, organized after [mattpocock/skills](https://github.com/mattpocock/skills). The flagship is `lowband`: **human-agent collaboration under low cognitive bandwidth** — the agent's capability never degrades; its presentation, questioning, and decision routing adapt to the human's current state.
 
 ## Install
 

@@ -2,7 +2,7 @@
 
 [English README](./README.md)
 
-个人 agent skills 仓库，组织方式参考 [mattpocock/skills](https://github.com/mattpocock/skills)。核心主题：**低认知带宽下的人机协作**。agent 的工作能力不降级，但呈现方式、提问方式和决策路由要对齐人当下的状态。
+我日常在用的 agent skills，组织方式参考 [mattpocock/skills](https://github.com/mattpocock/skills)。其中 `lowband` 是特色：**低认知带宽下的人机协作**，agent 的工作能力不降级，但呈现方式、提问方式和决策路由对齐人当下的状态。
 
 ## 安装
 
