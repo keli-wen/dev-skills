@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: Generate a minimal-sufficient handoff when another agent or session will take ownership of a task or continue unfinished work. Use for /handoff, "把任务交给下一个 agent", "生成 handoff", "让另一个 session 继续", session transfer, or task ownership transfer. Reuses durable artifacts by reference instead of copying them, and redacts secrets.
+description: Generate a minimal-sufficient handoff when another agent or session will take ownership of a task or continue unfinished work. Use for /handoff, "把任务交给下一个 agent", "生成 handoff", "让另一个 session 继续", session transfer, task ownership transfer, or restarting in a fresh context when the current session has degraded (a handoff to your future self). Reuses durable artifacts by reference instead of copying them, and redacts secrets.
 metadata:
   short-description: Minimal-sufficient task handoff
 ---
@@ -8,6 +8,8 @@ metadata:
 # handoff
 
 Compress the current task into a prompt the next agent can start from directly. Issues, context docs, PRs, commits, and diffs are the sources of truth; the handoff only provides entry points, current state, and the necessary not-yet-persisted delta.
+
+The same compression works in three directions: transferring ownership to another agent or session; disciplining spawn contracts when a dispatcher delegates slices (see `multi-agent-driven`); and restarting yourself — when the current context has degraded (noise from failed explorations polluting decisions), a handoff aimed at your own fresh session beats continuing in the noise. Compaction is just a handoff to your future self.
 
 **Language**: mirror the user's language.
 

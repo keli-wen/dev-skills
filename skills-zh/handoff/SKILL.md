@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: 当另一个 agent 或 session 要接管任务或继续未完成工作时，生成最小充分交接。触发语：/handoff、「把任务交给下一个 agent」「生成 handoff」「让另一个 session 继续」、session 转移、任务所有权转移。持久 artifact 用引用不用复制，输出前抹掉 secrets。
+description: 当另一个 agent 或 session 要接管任务或继续未完成工作时，生成最小充分交接。触发语：/handoff、「把任务交给下一个 agent」「生成 handoff」「让另一个 session 继续」、session 转移、任务所有权转移，或当前上下文退化时重开一个干净 session（交接给未来的自己）。持久 artifact 用引用不用复制，输出前抹掉 secrets。
 metadata:
   short-description: 最小充分的任务交接
 ---
@@ -8,6 +8,8 @@ metadata:
 # handoff
 
 把当前任务压缩成下一位 agent 可以直接开工的 prompt。issue、context 文档、PR、commit 和 diff 是事实源；handoff 只提供入口、当前状态和必要的未落盘增量。
+
+同一套压缩有三个使用方向：把所有权转移给另一个 agent / session；给派发者的 spawn 契约提供纪律（见 `multi-agent-driven`）；以及重启你自己——当前上下文退化时（失败探索的噪声在污染决策），生成一份朝向自己新 session 的 handoff，好过在噪声里继续。compact 本质上就是交接给未来的自己。
 
 **语言**：跟随用户的语言。
 
