@@ -18,10 +18,10 @@ Research that starts from what the project already knows and ends with the proje
 3. **Fan out** (using `multi-agent-driven` patterns): parallel researchers with distinct angles — official docs, community and prior art, papers, code in the wild. Each returns raw, citable findings with source name and URL or path.
 4. **Verify**: every claim that will drive a decision gets an adversarial pass — a separate check that tries to refute it or show it is stale. Mark key claims confirmed / plausible / refuted.
 5. **Synthesize**: one report — answer first, then evidence, then open questions. Keep cited facts and your own judgment visibly separate.
-6. **File back**: write the durable part into the project's context system following its placement rules (if the repo has a context map file, check it first). The chat gets the summary plus the file path.
+6. **File back**: hand the durable part to `to-ctx`, which places it in the project's context system per its rules. The chat gets the summary plus the file path.
 
 ## Rules
 
 - Never re-research what contexts already answer; cite the context file instead.
 - Verification effort scales with decision impact, not with how interesting a claim is.
-- Dependency direction: may use `multi-agent-driven` and `handoff`; never invokes user-facing skills.
+- Dependency direction: may use `multi-agent-driven`, `to-ctx`, and `handoff`; never invokes user-facing skills.
