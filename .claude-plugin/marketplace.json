@@ -1,0 +1,16 @@
+{
+  "name": "dev-skills",
+  "owner": {
+    "name": "Keli Wen",
+    "url": "https://github.com/keli-wen"
+  },
+  "description": "Dev skills I use day to day in agentic engineering.",
+  "plugins": [
+    {
+      "name": "devai",
+      "source": "./",
+      "description": "Dev skills for agentic engineering: long-horizon execution, fan-out dispatch, handoff, context research, plan grilling, and a low-bandwidth collaboration mode.",
+      "tags": ["agent-skills", "long-horizon", "multi-agent", "context-engineering"]
+    }
+  ]
+}

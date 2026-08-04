@@ -1,72 +1,85 @@
-# Keli's Agent Skills
+<p align="center">
+  <img src="./assets/logo.svg" width="140" alt="devai">
+</p>
+
+# Dev Agent Skills
 
 [中文版 README](./README.zh-CN.md)
 
-The agent skills I use day to day, organized after [mattpocock/skills](https://github.com/mattpocock/skills).
+A set of dev skills I use day to day in agentic engineering.
+
+![Skill dependency graph](./assets/dependency-graph.svg)
 
 ## Install
 
 ```bash
-npx skills@latest add keli-wen/skills
+npx skills@latest add keli-wen/dev-skills
 ```
 
-Invoke with `/lowband` in Claude Code, `$lowband` in Codex (same for the other skills).
+Or as a Claude Code plugin (skills are then namespaced, e.g. `/devai:handoff`):
+
+```
+/plugin marketplace add keli-wen/dev-skills
+/plugin install devai@dev-skills
+```
 
 ## Skills
 
 | When you… | Use |
 |---|---|
-| are mentally drained but need the work to keep moving — the agent reports cockpit-style and turns decisions into two-option questions with a recommendation | `lowband` |
-| hand the current task to another agent or session and want it to start directly, without duplicated sources of truth | `handoff` |
-| want the current task fanned out to several subagents, with the pattern chosen by task type | `multi-agent-driven` |
-| need deep research that starts from your project's existing contexts and files verified findings back into them | `ctx-research` |
-| have conclusions in the chat that deserve to become a properly-placed context document | `to-ctx` |
-| want to be interrogated about a plan, context-aware and important-questions-first | `ctx-grill` (🤔 design open, see notes below) |
+| have a goal worth hours of autonomous work: agree on the spec and acceptance checks together, let the agent run, then review the report | `/long-horizon` |
+| are mentally drained but the work must keep moving: the agent reports only what matters and turns the decisions only you can make into two-option questions with a recommendation | `/lowband` |
+| want to hand the current task to another agent or session without duplicating existing documents, so it can start working immediately | `/handoff` |
+| want the task split across several subagents in parallel, but only after checking that the split is actually worth it | `/fan-out` |
+| need deep research that starts from your project's existing documents and writes verified findings back into them | `/ctx-research` |
+| have conclusions in the chat that deserve to become a properly placed project document | `/to-ctx` |
+| are about to commit to a plan and want the agent to interrogate it first, then write down the decisions you reach | `/ctx-grill` |
 
-## Design conventions
+## 🧭 Design philosophy
 
-### lowband is a cross-cutting mode, and it owns its overrides
+### long-horizon: don't run long for the sake of running long
 
-Direction matters: other skills stay unmodified (they may be third-party and not editable), and lowband itself carries the downgrade policy — a generic question filter that applies to any skill, plus named overrides for known ones. See "Overrides for other skills and tools" in [`skills/lowband/SKILL.md`](./skills/lowband/SKILL.md).
+The obvious way to set up a long agent run is to break a goal into a few sub-goals, hand over a sufficiently detailed instruction document, and let it loose. It looks thorough. But this easily becomes long-horizon for its own sake: plenty of tokens burned, nothing reliably delivered.
 
-Hard boundary: **lowband reduces interruptions; it never expands authorization.** Deleting, publishing, deploying, spending, and sending anything external need explicit user approval in every mode.
+The entire skill is designed around one question: **how do you make a long run valuable, not merely long?**
 
-### Dependency direction (after Matt)
+- **Before the run**: you and the agent iterate on the spec until every acceptance criterion names a runnable check. A goal that cannot explain how completion will be verified does not enter the run. At the same time, you agree on what the agent may and may not do unattended.
+- **During the run**: the agent remains an orchestrator and uses `/fan-out` to dispatch execution to subagents. Nothing counts as done without real evidence such as test output or command results; "I finished it" is not evidence. Newly discovered problems join the queue, while a blocked item records exactly who needs to answer what without stalling independent branches.
+- **Watch at any time**: `.long-horizon/<goal-slug>/report.html` refreshes as the run progresses. It shows the goal and acceptance criteria, every item's status, a dependency graph with the critical path and blocking cut-points, key decisions, open questions, the last update time, and the session count. You should never have to reconstruct the agent's current state from its logs.
+- **After the run**: the same HTML report becomes the final review surface. You define the goal at the beginning and review the result at the end; in between, you can observe without repeatedly taking the task back.
 
-User-invoked skills may use model-invoked ones; sideways and upward calls are not allowed, which prevents loops. Current graph: `ctx-research` → `multi-agent-driven` → `handoff`, plus `ctx-research` → `to-ctx` for filing results.
+I deliberately specify a **Contract, not Template**. The contract defines what the report must contain and keeps its data separate from presentation; the agent decides what the page should look like. Hardcoding a visual template would bet against the next model. I would rather constrain what the report must communicate than how it must look.
 
-### The ctx-* family
+This is the skill I most want to get right, and I am still iterating on it through real work. Its evolution, including the field test that forced a full redesign, is recorded in [RELEASE_LOG.md](./RELEASE_LOG.md).
 
-`ctx-*` skills share one contract: **read the project's durable context layer before acting, and write durable results back**. Members: `ctx-research` (ready) and `ctx-grill` (design open). `to-ctx` is the family's shared write path — family skills end with it, and it also works standalone.
+### lowband: let the agent carry the information-processing load
 
-### Composition: pipe notation
+The usual advice is to stop working when you are drained. But in reality the work often has to continue; you simply no longer have the energy to sift through everything the agent gives you and decide what matters.
 
-Stage skills chain with `|`, read left to right: `A | B` means "run A, then feed its result to B in the same session".
+lowband applies to the whole collaboration rather than joining a pipeline as another step. Once it is on, the agent digests the information and handles routine choices for you. It brings back only decisions that genuinely need your judgment, formatted as two options with a recommendation; most of the time, you can answer with one letter. Other skills stay unchanged. lowband filters their questions and confirmation requests in one place: the agent decides anything that will not change the task's direction, and asks you about anything that might. See [`skills/lowband/SKILL.md`](./skills/lowband/SKILL.md) for the full rules.
+
+But one thing never changes: **the information-processing load can move toward the agent; authority cannot.** Deleting, publishing, deploying, spending, and sending anything external still require your explicit approval in every mode.
+
+### The rest: composable atoms
+
+The remaining skills are more conventional. I wrote my own versions so they can form a coherent system and evolve together.
+
+The `ctx-*` family includes `ctx-research` for research, `ctx-grill` for interrogation, and `to-ctx` for filing. They share one contract: **read the project's durable context documents before acting, then write back conclusions worth keeping.** A question those documents already answer is never asked again (`ctx-grill`'s interview engine is adapted from `grilling` in mattpocock/skills, MIT). `handoff` compresses the current task into something the next agent can start from directly. It points to existing documents and carries only the new information instead of duplicating the source of truth.
+
+`fan-out` deserves a closer look. Agents do not reliably initiate multi-agent collaboration on their own, so the skill is not merely about spawning more subagents; it teaches them **when a split is worth it and where to cut**. It checks the economics first, because many problems that appear to "need multi-agent" are really failures of single-context management. If a split is worthwhile, the cut follows context coupling between subtasks rather than mechanically dividing work by stage. The full reasoning is in my blog post: [When Multi-Agent?](https://keli-wen.github.io/One-Poem-Suffices/thinking-in-context/when-multi-agent/)
+
+These atoms stay small enough to compose into concrete scenarios with pipes. The agent interprets the convention from left to right:
 
 ```
-/ctx-research <topic> | /to-ctx        # research, then file the findings
-/ctx-research <topic> | /handoff       # research, then hand off to the next agent
-/multi-agent-driven <task> | /to-ctx   # fan out, then file the integrated result
+/ctx-research <topic> | /to-ctx    # research, then file the findings
+/fan-out <task> | /to-ctx          # dispatch, then file the integrated result
 ```
 
-This is an agent-interpreted convention, not shell parsing — it works because the runtime is the model. Modes don't pipe, they wrap: switch `lowband` on and any chain runs under it.
+Dependencies only flow downward, so they cannot form loops; the graph at the top shows the complete structure. English `skills/` is the source of truth, while `skills-zh/` is its Chinese mirror under the same names. Install the pack that matches the language you normally use with your agent.
 
-### Bilingual policy
+> [!Note]
+> **TODO**: a set of best-practice examples is coming, using real scenarios to show how these skills compose.
 
-`skills/` (English) is canonical: models and an international audience read it, and every skill mirrors the user's language at runtime, so Chinese users get Chinese output either way. `skills-zh/` carries Chinese translations of the same skills for people who prefer reading or installing Chinese instructions; it is regenerated from `skills/` after changes, and on any conflict `skills/` wins. The two share skill names, so install one of them, not both. READMEs: this file (EN) and [README.zh-CN.md](./README.zh-CN.md) (中文).
+## References
 
-### ctx-grill — design notes (open)
-
-Matt's grilling is three pieces, not two: `grilling` (a reusable interview engine, model-invoked), `grill-me` (a generic entry that leaves nothing behind), and `grill-with-docs` (an engineering entry that writes ADRs and the domain model as it goes). The real reason for the split is **what a session leaves behind**, not "with or without context".
-
-My projects already have a durable layer (a `contexts/` system), so the plan is to merge the entries into one `ctx-grill`:
-
-1. **Read before asking**: read the relevant contexts first; never ask what they already answer.
-2. **Priority-aware**: rank questions by "would the answer change the plan's direction"; ask the important ones first, stop when marginal value clearly drops (Matt's version has no prioritization — this is the main difference).
-3. **Write back**: decisions produced by the session land in contexts, so they are never asked again.
-
-Open questions before implementing:
-
-- Is "read ctx before asking" a grill feature, or a property every skill here should have?
-- What exactly writes back, and in what form — decision records, assumption lists, or both?
-- Where is the stop line between "grill until every branch is resolved" (Matt) and "stop at diminishing returns" (mine)?
+- [mattpocock/skills](https://github.com/mattpocock/skills): this repository's organization follows Matt's; `ctx-grill` vendors its `grilling` interview engine (MIT).

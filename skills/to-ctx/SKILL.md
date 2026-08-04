@@ -1,6 +1,6 @@
 ---
 name: to-ctx
-description: Turn the current conversation's conclusions into a well-formed context document filed in the project's context system. Use for /to-ctx, "写进 contexts", "落个 context", "把这个结论归档", "file this into contexts". Finds the placement rules (e.g. CONTEXT_MAP.md), writes in the project's house style, and reports the path.
+description: Turn the current conversation's conclusions into a well-formed context document filed in the project's context system. Use for /to-ctx, "file this into contexts", "turn this conclusion into a context doc". Finds the placement rules (e.g. CONTEXT_MAP.md), writes in the project's house style, and reports the path.
 metadata:
   short-description: File conclusions into the context system
 ---

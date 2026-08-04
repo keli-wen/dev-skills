@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-labelledby="title desc">
+  <title id="title">devai — light</title>
+  <desc id="desc">Light theme: black line graph on warm white, agent hub with a lit mint core.</desc>
+
+  <defs>
+    <radialGradient id="bgL" gradientUnits="userSpaceOnUse" cx="230" cy="110" r="640">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.5" stop-color="#fbfaf7"/>
+      <stop offset="1" stop-color="#f2f1eb"/>
+    </radialGradient>
+  </defs>
+
+  <rect x="0" y="0" width="512" height="512" rx="118" fill="url(#bgL)"/>
+  <rect x="3" y="3" width="506" height="506" rx="115" fill="none" stroke="#14130f" stroke-opacity="0.1" stroke-width="2"/>
+
+  <g fill="none" stroke="#14130f" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="131" y1="140" x2="131" y2="372"/>
+    <path d="M131 140 H280 L367 256 L280 372 H131"/>
+    <line x1="131" y1="256" x2="367" y2="256"/>
+  </g>
+
+  <g fill="url(#bgL)" stroke="#14130f" stroke-width="17">
+    <circle cx="131" cy="140" r="28"/>
+    <circle cx="131" cy="256" r="28"/>
+    <circle cx="131" cy="372" r="28"/>
+  </g>
+
+  <g fill="#14130f">
+    <circle cx="280" cy="140" r="18"/>
+    <circle cx="280" cy="372" r="18"/>
+  </g>
+
+  <circle cx="367" cy="256" r="43" fill="url(#bgL)" stroke="#14130f" stroke-width="17"/>
+  <circle cx="367" cy="256" r="16" fill="#2eb69b"/>
+</svg>

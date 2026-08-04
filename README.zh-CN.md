@@ -1,62 +1,85 @@
-# Keli's Agent Skills（中文）
+<p align="center">
+  <img src="./assets/logo.svg" width="140" alt="devai">
+</p>
+
+# Dev Agent Skills（中文）
 
 [English README](./README.md)
 
-我日常在用的 agent skills，组织方式参考 [mattpocock/skills](https://github.com/mattpocock/skills)。
+这是一组我日常在 agentic engineering 中使用的 dev skills。
+
+![Skill 依赖关系图](./assets/dependency-graph.zh-CN.svg)
 
 ## 安装
 
 ```bash
-npx skills@latest add keli-wen/skills
+npx skills@latest add keli-wen/dev-skills
 ```
 
-Claude Code 里用 `/lowband` 调用，Codex 里用 `$lowband`，其余 skill 同理。默认装英文版 `skills/`；想读中文指令的装 `skills-zh/`（两者同名，装其一即可）。
+或者以 Claude Code 插件方式安装（此时命令带命名空间，如 `/devai:handoff`）：
+
+```
+/plugin marketplace add keli-wen/dev-skills
+/plugin install devai@dev-skills
+```
 
 ## Skills
 
 | 什么时候用 | 用哪个 |
 |---|---|
-| 脑力耗尽但工作还得推进：agent 只给驾驶舱信息，决策做成带推荐项的二选一 | `lowband` |
-| 把当前任务交给另一个 agent / session，让它不重复事实源、直接开工 | `handoff` |
-| 想把当前任务按类型拆给多个 subagent 并行推进 | `multi-agent-driven` |
-| 需要从项目已有 contexts 出发做深度研究，验证过的结论写回去 | `ctx-research` |
-| 对话里的结论值得变成一份放对位置的规范 context 文档 | `to-ctx` |
-| 想被带着上下文、按重要性排序地追问方案 | `ctx-grill`（🤔 设计中） |
+| 一个目标值得 agent 持续自主执行数小时：先一起敲定规格和验收方式，跑完后再看报告 | `/long-horizon` |
+| 已经很累，但工作还得推进：agent 只汇报关键信息，把必须由你决定的事变成带推荐项的选择题 | `/lowband` |
+| 把当前任务交给另一个 agent 或新会话继续，交接内容不重复已有文档，接手后可以直接开工 | `/handoff` |
+| 把任务拆给多个 subagent 并行处理，不过动手前要先判断这次拆分是否真的划算 | `/fan-out` |
+| 从项目已有的文档出发做深度调研，再把验证过的结论写回去 | `/ctx-research` |
+| 把对话中值得保留的结论整理成一份放在正确位置的项目文档 | `/to-ctx` |
+| 敲定方案前让 agent 连环追问，把模糊处问清楚，并把已经确定的决定记录下来 | `/ctx-grill` |
 
-## 设计约定
+## 🧭 设计哲学
 
-### lowband 是横切模式，降级规则由它自己持有
+### long-horizon：别为了长跑而长跑
 
-方向很重要：其他 skill 保持原样（它们可能是第三方的，改不了），降级策略写在 lowband 自己身上：一条适用于任何 skill 的通用提问过滤规则，加上对已知 skill 的具名覆盖。详见 [`skills/lowband/SKILL.md`](./skills/lowband/SKILL.md) 的 "Overrides" 一节。
+让 agent 执行一个长任务，朴素的做法是拆出几个 sub-goal，再配上一份足够长的指令文档，然后放手让它跑。看起来准备得很充分，但这样的任务很容易变成「为了 long-horizon 而 long-horizon」：token 烧了不少，结果却没有被真正交付。
 
-硬边界：**lowband 降低打扰，不扩大授权**。删除、发布、部署、付费、对外发送，任何模式下都要用户拍板。
+所以这个 skill 的全部设计都在回答一个问题：**怎么让长跑不只是跑得久，也跑得值？**
 
-### 依赖方向（借自 Matt）
+- **开跑前**：人和 agent 反复把规格磨清楚。每条完成标准都必须给出可运行的检查，说不清「怎样才算完成」的目标不允许进入长跑；同时约定好运行期间可以做什么、不能做什么。
+- **运行中**：agent 只负责编排，具体执行通过 `/fan-out` 派给 subagent。每完成一项都要附上测试输出、命令结果等真实证据，光说「做完了」不算。新发现的问题会进入待办队列；卡住的事项则写清楚「需要谁回答什么」，不拖住其他可以继续的分支。
+- **随时查看**：`.long-horizon/<goal-slug>/report.html` 会随着进度持续更新。你可以直接看到目标和验收标准、每项任务的状态、标出关键路径与阻塞点的依赖关系图、关键决定、待回答的问题、最后更新时间和累计 session 数，不需要翻日志猜 agent 现在走到了哪里。
+- **结束后**：同一份 HTML 报告会收束成最终结果，交给你复核。整个过程中，人只需要在开跑前定义目标、结束后检查结果；中途可以观察，但不需要反复接管任务。
 
-用户调用的 skill 可以用 model-invoked 的 skill；平级和反向调用不允许，避免循环。当前依赖图：`ctx-research` → `multi-agent-driven` → `handoff`，另有 `ctx-research` → `to-ctx` 负责归档。
+这里我刻意规定的是 **Contract, not Template**。报告必须包含哪些信息、数据如何与渲染分离，这些属于 contract；至于页面具体长什么样，则交给 agent 自己决定。随着模型能力增长，提前 hardcode 一套视觉模板反而会限制它的表达，所以我更愿意约束「必须讲清楚什么」，而不是规定「必须画成什么样」。
 
-### ctx-* 家族
+这是我最想做好的一个 skill，目前仍在用自己的真实任务持续迭代。它如何一步步演化到现在，包括一次实测如何推动整个设计重构，都记录在 [RELEASE_LOG.md](./RELEASE_LOG.md) 中（英文）。
 
-`ctx-*` 的 skill 共守一条契约：**动手前先读项目的持久 context 层，产出的持久结论写回去**。成员：`ctx-research`（可用）、`ctx-grill`（设计中）。`to-ctx` 是家族共用的写入通道：家族 skill 以它收尾，单独用也行。
+### lowband：把信息处理交给 agent
 
-### 组合：管道写法
+常见的建议是，低精力的时候就别工作了。但真实情况往往是：活还得继续，只是你已经没有余力从 agent 给出的大量信息里筛重点、做判断。
 
-阶段型 skill 用 `|` 串联，从左到右读：`A | B` 表示「先跑 A，把结果喂给同一个 session 里的 B」。
+lowband 是一个作用于整段协作的模式。打开后，agent 会替你消化信息和处理日常选择，只把真正需要你拍板的决定交回来，并整理成带推荐项的二选一；大多数时候，你回复一个字母就够了。它不会改变其他 skill 本身，而是在它们提问或请求确认时统一过滤：不影响方向的事由 agent 自己决定，可能改变方向的事才来问你。具体规则见 [`skills/lowband/SKILL.md`](./skills/lowband/SKILL.md)。
+
+但有一件事不会随模式改变：**信息处理的责任可以向 agent 移动，授权的范围不能。** 删除、发布、部署、付费、对外发送等操作，无论是否开启 lowband，都必须由你明确批准。
+
+### 其余：可以自由组合的原子件
+
+剩下的 skill 更常见一些。我自己再写一遍，主要是想让它们形成一套可以持续迭代的系统。
+
+`ctx-*` 家族包括负责调研的 `ctx-research`、负责追问的 `ctx-grill`，以及负责归档的 `to-ctx`。它们共守一条约定：**动手前先读项目中长期维护的 context 文档，做完后再把值得保留的结论写回去。** 文档已经回答的问题不再重复提问（`ctx-grill` 的追问引擎改编自 mattpocock/skills 的 `grilling`，MIT）。`handoff` 则负责把当前任务压缩成一份下个 agent 拿来就能开工的交接，只提供已有文档的入口和本次新增的信息，不复制整份事实源。
+
+`fan-out` 值得单独说一下。agent 默认并不擅长主动开展 multi-agent 协作，所以这个 skill 的重点不是「多开几个 subagent」，而是教它**什么时候值得拆，以及应该沿着哪里拆**。它会先判断并行是否划算，因为很多看起来「需要多智能体」的问题，其实只是单个上下文没有管理好；确认值得拆之后，再沿子任务之间的上下文耦合度切分，而不是机械地按工序分段。背后的完整思考写在我的博客：[When Multi-Agent?](https://keli-wen.github.io/One-Poem-Suffices/thinking-in-context/when-multi-agent/)
+
+这些原子件保持足够小，因此可以用管道组合成更具体的场景。管道由 agent 解释，从左到右执行：
 
 ```
-/ctx-research <题目> | /to-ctx        # 先调研，再归档
-/ctx-research <题目> | /handoff       # 先调研，再交接给下一个 agent
-/multi-agent-driven <任务> | /to-ctx  # 先派发，再归档整合结果
+/ctx-research <题目> | /to-ctx    # 先调研，再归档
+/fan-out <任务> | /to-ctx         # 先派发，再归档整合结果
 ```
 
-这是 agent 解释的约定，不是 shell 解析；能成立是因为运行时就是模型。模式不参与管道，它是包在外面的：开着 `lowband`，整条链都在它之下运行。
+它们之间的依赖只朝一个方向，不会成环，顶部的图展示了完整关系。英文 `skills/` 是事实源，`skills-zh/` 是同名的中文镜像；按照你平时与 agent 对话的语言选择一份安装即可。
 
-### 双语策略
+> [!Note]
+> **TODO**：之后会补充一组 best-practice 示例，用真实场景展示这些 skill 如何组合使用。
 
-英文 `skills/` 是唯一事实源：模型和国际读者读它，且每个 skill 运行时都跟随用户语言输出，中文用户照样得到中文回复。`skills-zh/` 是给想读或想装中文指令的人准备的翻译版，改动后从 `skills/` 重新生成，冲突以英文为准。两边 skill 同名，装其一即可。
+## 参考
 
-### ctx-grill 设计笔记（未定稿）
-
-Matt 的 grill 是三件套：`grilling`（可复用追问引擎）、`grill-me`（通用入口，问完不留东西）、`grill-with-docs`（工程入口，边问边写 ADR 和领域模型）。分层的真实理由是「问完留下什么」，不是「带不带上下文」。
-
-我的项目已有 `contexts/` 持久层，所以计划合成一个 `ctx-grill`：先读 ctx 再问（不问已回答的）、按「答案会不会改变方案方向」排优先级（Matt 版没有优先级，这是主要差异）、敲定的写回 contexts。实现前待想清楚的问题见英文 README。
+- [mattpocock/skills](https://github.com/mattpocock/skills)：本仓库的组织方式参考 Matt；`ctx-grill` 内嵌了它的 `grilling` 访谈引擎（MIT）。

@@ -1,21 +1,21 @@
 ---
 name: lowband
-description: Low-bandwidth collaboration mode — response protocol for when the user's attention or mental capacity is depleted. Activate on /lowband or $lowband, or when the user says "低带宽", "省脑", "脑子不够用了", "太累了，简短点", "too tired, keep it short", "brain is fried". Stays active every turn until the user says "back to normal" / 「恢复正常」 or invokes with off. Work capability is not degraded; only presentation is compressed and decisions are filtered.
+description: Low-bandwidth collaboration mode — response protocol for when the user's attention or mental capacity is depleted. Activate on /lowband or $lowband, or when the user says "too tired, keep it short", "brain is fried", "low bandwidth". Stays active every turn until the user says "back to normal" (or the equivalent in their language) or invokes with off. Work capability is not degraded; only presentation is compressed and decisions are filtered.
 metadata:
   short-description: Low-bandwidth collaboration mode
 ---
 
 # lowband — Low-Bandwidth Collaboration Mode
 
-A standing protocol: it applies to EVERY turn from activation until the user says "back to normal" (恢复正常) or invokes with `off`.
+A standing protocol: it applies to EVERY turn from activation until the user says "back to normal" (or the equivalent in their language) or invokes with `off`.
 
 Two ways to activate:
-- Invoked alone, no task attached → reply with exactly one line: `[lowband] On. Say "back to normal" to exit.` (for Chinese users: `[低带宽] 已开启，说「恢复正常」退出。`)
+- Invoked alone, no task attached → reply with exactly one line: `[lowband] On. Say "back to normal" to exit.` — rendered in the user's language, tag included.
 - Invoked with a task or question attached (e.g. `$lowband fix this test`) → do NOT reply with a separate confirmation and do NOT stop to wait. Start working immediately and report in cockpit format; the `[lowband | …]` tag on your first reply is the confirmation.
 
 On exit, confirm in one line.
 
-**Language**: mirror the user's language in all output. Cockpit labels are given below in English and Chinese; use whichever matches the user.
+**Language**: mirror the user's language in all output. Cockpit labels below are English; for a non-English user, translate the tag, the state words, and the four line labels into their language, keeping the structure.
 
 ## Core principle
 
@@ -30,8 +30,6 @@ Your call: none; or ONE two-option question with a marked recommendation.
 Next: what you will do next.
 Verify/Risk: only present when it matters.
 ```
-
-中文版：`[低带宽｜进行中 / 需决定 / 已完成 / 受阻]`，四行为「现状 / 要你拍板 / 下一步 / 验证-风险」。
 
 ## Hard rules
 
@@ -51,9 +49,9 @@ lowband owns its downgrade policy. Other skills stay unmodified; while lowband i
 
 - **Generic (any skill or tool)**: whenever a skill's flow calls for asking the user or pausing for confirmation, filter it through lowband — escalate only questions whose answer would change the direction of the plan; assume sensible defaults for the rest and record each assumption explicitly. Confirmation pauses inside read-only flows are skipped entirely. Anything crossing the authorization boundary is never skipped.
 - **Named overrides** (when these skills exist):
-  - Interview skills (`grill-me`, `grill-with-ctx`, …): ask only the highest-priority questions; convert the rest into stated assumptions the user can veto later.
-  - Research skills (`deep-research`, `ctx-research`, …): skip mid-flight confirmations, run to a conclusion, report in cockpit format. Research is read-only, so skipping confirmation grants no new authority.
-  - `handoff`: unchanged; a handoff card is already the compact format.
+  - Interview skills (`/grill-me`, `/ctx-grill`, …): ask only the highest-priority questions; convert the rest into stated assumptions the user can veto later.
+  - Research skills (`/deep-research`, `/ctx-research`, …): skip mid-flight confirmations, run to a conclusion, report in cockpit format. Research is read-only, so skipping confirmation grants no new authority.
+  - `/handoff`: unchanged; a handoff card is already the compact format.
 
 ## Calibration sample
 
@@ -61,15 +59,16 @@ A "Status" line reporting several finished items. The compressed style fails; th
 
 - ❌ Compressed (fewer characters, higher parsing cost): "review posted to PR #617 (must-fix bug: stale approval label survives content updates, unreviewed text can slip in), 9-line META cleanup logged, follow-up #620 filed, Q4 test hit 18/24 (feed is title-only, body needs a separate fetch)."
 - ✅ Selective (more lines, one read): "All four items are done. The one that matters: review found a must-fix bug in PR #617: the old approval label survives content updates, so unreviewed text can reach the official library. The other three went fine; say 'expand' for details."
-- 中文对照：❌「review 发到 PR #617（有个必修 bug：旧放行标签还在，没审的正文能溜进正式库）、删 9 行噪音已记录、follow-up #620 已建、Q4 实测 24 家命中 18 家（feed 只给标题，正文还得另抓）。」✅「四件事都办完了。最要紧的是 review 在 PR #617 里发现一个必须修的 bug：内容更新后旧的放行标签没有失效，没审过的内容能混进正式库。其余三件都顺利，想看细节说『展开』。」
 
 ## Control words
 
-- `status` / `状态` → re-send the four cockpit lines
-- `expand X` / `展开 X` → explain only X; stay in the mode; keep the current status tag at the top and any pending decision on the last line
-- `pause` / `暂停` → finish the current safe operation, then stop
-- `take over` / `接管` → output a short handoff card usable by a person or another agent
-- `back to normal` / `恢复正常` / `off` → exit with a one-line confirmation
+- `status` → re-send the four cockpit lines
+- `expand X` → explain only X; stay in the mode; keep the current status tag at the top and any pending decision on the last line
+- `pause` → finish the current safe operation, then stop
+- `take over` → output a short handoff card usable by a person or another agent
+- `back to normal` / `off` → exit with a one-line confirmation
+
+Control words also work as their equivalents in the user's language.
 
 ## Self-check
 

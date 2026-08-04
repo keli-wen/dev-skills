@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="620" viewBox="0 0 880 620" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" role="img" aria-label="Skill 依赖关系图">
+  <title>Skill 依赖关系图</title>
+  <style>
+    .surface { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); }
+    .node    { fill: #ffffff; stroke: rgba(11,11,11,0.10); }
+    .frame   { fill: none; stroke: #898781; stroke-dasharray: 5 5; }
+    .ink  { fill: #0b0b0b; }
+    .ink2 { fill: #52514e; }
+    .muted { fill: #898781; }
+    .halo { paint-order: stroke; stroke: #fcfcfb; stroke-width: 4; }
+    .edge { fill: none; stroke: #898781; stroke-width: 1.6; }
+    .edge-soft { stroke-dasharray: 4 4; }
+    .acc-blue   { fill: #2a78d6; }
+    .acc-orange { fill: #eb6834; }
+    .acc-aqua   { fill: #1baf7a; }
+    .acc-yellow { fill: #eda100; }
+    .acc-mode   { fill: #898781; }
+    .mono { font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace; }
+    @media (prefers-color-scheme: dark) {
+      .surface { fill: #1a1a19; stroke: rgba(255,255,255,0.10); }
+      .node    { fill: #232322; stroke: rgba(255,255,255,0.10); }
+      .ink  { fill: #ffffff; }
+      .ink2 { fill: #c3c2b7; }
+      .halo { stroke: #1a1a19; }
+      .acc-blue   { fill: #3987e5; }
+      .acc-orange { fill: #d95926; }
+      .acc-aqua   { fill: #199e70; }
+      .acc-yellow { fill: #c98500; }
+    }
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+      <path d="M0,0 L7,3.5 L0,7 Z" fill="#898781"/>
+    </marker>
+  </defs>
+
+  <rect class="surface" x="0.5" y="0.5" width="879" height="619" rx="14"/>
+
+  <text class="ink" x="32" y="44" font-size="19" font-weight="650">Skill 依赖关系图</text>
+  <text class="ink2" x="32" y="68" font-size="12.5">箭头指向一个 skill 可以调用的对象。依赖只向下，不向平级或上层，因此不会成环。</text>
+
+  <!-- lowband：本身是 skill，同时是作用于整段协作的模式 -->
+  <rect class="frame" x="32" y="110" width="608" height="476" rx="12"/>
+  <text class="ink2 halo" x="284" y="115" font-size="11.5">分担信息负担 · 授权仍由你掌握</text>
+  <g>
+    <rect class="node" x="52" y="81" width="216" height="58" rx="9"/>
+    <rect class="acc-mode" x="62" y="95" width="4" height="30" rx="2"/>
+    <text class="mono ink" x="76" y="106" font-size="14" font-weight="600">lowband</text>
+    <text class="ink2" x="76" y="124" font-size="11">作用于整段协作</text>
+  </g>
+
+  <!-- 依赖边 -->
+  <path class="edge edge-soft" d="M400,214 C450,232 498,248 520,265" marker-end="url(#arrow)"/>
+  <path class="edge edge-soft" d="M268,214 C205,244 175,300 155,382" marker-end="url(#arrow)"/>
+  <path class="edge edge-soft" d="M240,188 C130,196 52,254 52,340 C52,430 110,510 148,528" marker-end="url(#arrow)"/>
+  <path class="edge edge-soft" d="M440,188 C560,196 626,254 626,320 C626,360 606,390 580,402" marker-end="url(#arrow)"/>
+  <path class="edge" d="M262,326 C240,352 195,368 165,383" marker-end="url(#arrow)"/>
+  <path class="edge" d="M376,326 C416,348 474,362 502,383" marker-end="url(#arrow)"/>
+  <path class="edge" d="M320,326 C332,380 332,450 276,500" marker-end="url(#arrow)"/>
+  <path class="edge" d="M160,444 C170,468 188,486 205,500" marker-end="url(#arrow)"/>
+  <path class="edge" d="M530,326 C529,346 528,364 528,382" marker-end="url(#arrow)"/>
+
+  <text class="muted halo" x="446" y="234" font-size="11">磨清规格</text>
+  <text class="muted halo" x="172" y="300" font-size="11" text-anchor="end">派发任务</text>
+  <text class="muted halo" x="150" y="184" font-size="11" text-anchor="end">结束交接</text>
+  <text class="muted halo" x="496" y="186" font-size="11">沉淀结论</text>
+  <text class="muted halo" x="452" y="348" font-size="11">归档结论</text>
+  <text class="muted halo" x="338" y="432" font-size="11">任务交接</text>
+  <text class="muted halo" x="180" y="482" font-size="11" text-anchor="end">升级为交接</text>
+  <text class="muted halo" x="538" y="352" font-size="11">写回决定</text>
+
+  <!-- 第零层：长程执行 -->
+  <g>
+    <rect class="node" x="240" y="156" width="200" height="58" rx="9"/>
+    <rect class="acc-yellow" x="250" y="170" width="4" height="30" rx="2"/>
+    <text class="mono ink" x="264" y="181" font-size="14" font-weight="600">long-horizon</text>
+    <text class="ink2" x="264" y="199" font-size="11">规格驱动的自主长跑</text>
+  </g>
+
+  <!-- 第一层：入口编排者 -->
+  <g>
+    <rect class="node" x="218" y="268" width="196" height="58" rx="9"/>
+    <rect class="acc-blue" x="228" y="282" width="4" height="30" rx="2"/>
+    <text class="mono ink" x="242" y="293" font-size="14" font-weight="600">ctx-research</text>
+    <text class="ink2" x="242" y="311" font-size="11">先读项目文档，再做深度调研</text>
+  </g>
+  <g>
+    <rect class="node" x="452" y="268" width="156" height="58" rx="9"/>
+    <rect class="acc-blue" x="462" y="282" width="4" height="30" rx="2"/>
+    <text class="mono ink" x="476" y="293" font-size="14" font-weight="600">ctx-grill</text>
+    <text class="ink2" x="476" y="311" font-size="11">带着上下文追问方案</text>
+  </g>
+
+  <!-- 第二层 -->
+  <g>
+    <rect class="node" x="72" y="386" width="170" height="58" rx="9"/>
+    <rect class="acc-orange" x="82" y="400" width="4" height="30" rx="2"/>
+    <text class="mono ink" x="96" y="411" font-size="14" font-weight="600">fan-out</text>
+    <text class="ink2" x="96" y="429" font-size="11">多智能体任务派发</text>
+  </g>
+  <g>
+    <rect class="node" x="436" y="386" width="140" height="58" rx="9"/>
+    <rect class="acc-blue" x="446" y="400" width="4" height="30" rx="2"/>
+    <text class="mono ink" x="460" y="411" font-size="14" font-weight="600">to-ctx</text>
+    <text class="ink2" x="460" y="429" font-size="11">持久结论写入通道</text>
+  </g>
+
+  <!-- 第三层 -->
+  <g>
+    <rect class="node" x="152" y="504" width="160" height="58" rx="9"/>
+    <rect class="acc-aqua" x="162" y="518" width="4" height="30" rx="2"/>
+    <text class="mono ink" x="176" y="529" font-size="14" font-weight="600">handoff</text>
+    <text class="ink2" x="176" y="547" font-size="11">最小充分的任务交接</text>
+  </g>
+
+  <!-- 图例 -->
+  <g font-size="11.5">
+    <rect class="acc-blue" x="664" y="102" width="12" height="12" rx="3"/>
+    <text class="ink2" x="684" y="112">ctx-* 家族</text>
+    <rect class="acc-orange" x="664" y="130" width="12" height="12" rx="3"/>
+    <text class="ink2" x="684" y="140">派发</text>
+    <rect class="acc-aqua" x="664" y="158" width="12" height="12" rx="3"/>
+    <text class="ink2" x="684" y="168">任务交接</text>
+    <rect class="acc-yellow" x="664" y="186" width="12" height="12" rx="3"/>
+    <text class="ink2" x="684" y="196">长程执行</text>
+    <rect class="acc-mode" x="664" y="214" width="12" height="12" rx="3"/>
+    <text class="ink2" x="684" y="224">模式：作用于整段协作</text>
+    <path class="edge" d="M664,246 L676,246" marker-end="url(#arrow)"/>
+    <text class="ink2" x="684" y="250">可调用（单向）</text>
+    <path class="edge edge-soft" d="M664,274 L676,274" marker-end="url(#arrow)"/>
+    <text class="ink2" x="684" y="278">long-horizon 的编排调用</text>
+  </g>
+
+  <!-- 管道组合 -->
+  <g>
+    <text class="muted" x="664" y="300" font-size="10.5" letter-spacing="1.2">管道组合</text>
+    <text class="mono ink2" x="664" y="322" font-size="10.5">/ctx-research … | /to-ctx</text>
+    <text class="mono ink2" x="664" y="340" font-size="10.5">/ctx-research … | /handoff</text>
+    <text class="mono ink2" x="664" y="358" font-size="10.5">/fan-out … | /to-ctx</text>
+    <text class="ink2" x="664" y="384" font-size="10.5">lowband 不进入管道；</text>
+    <text class="ink2" x="664" y="399" font-size="10.5">开启后，它作用于整条</text>
+    <text class="ink2" x="664" y="414" font-size="10.5">协作链。</text>
+  </g>
+</svg>
