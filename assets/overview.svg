@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="880" height="620" viewBox="0 0 880 620" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" role="img" aria-label="Skill dependency graph">
-  <title>Skill dependency graph</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="620" viewBox="0 0 880 620" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" role="img" aria-label="Skills overview">
+  <title>Skills overview</title>
   <style>
     .surface { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); }
     .node    { fill: #ffffff; stroke: rgba(11,11,11,0.10); }
@@ -15,6 +15,7 @@
     .acc-aqua   { fill: #1baf7a; }
     .acc-yellow { fill: #eda100; }
     .acc-mode   { fill: #898781; }
+    .label-bg   { fill: #fcfcfb; }
     .mono { font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace; }
     @media (prefers-color-scheme: dark) {
       .surface { fill: #1a1a19; stroke: rgba(255,255,255,0.10); }
@@ -26,6 +27,7 @@
       .acc-orange { fill: #d95926; }
       .acc-aqua   { fill: #199e70; }
       .acc-yellow { fill: #c98500; }
+      .label-bg   { fill: #1a1a19; }
     }
   </style>
   <defs>
@@ -36,17 +38,24 @@
 
   <rect class="surface" x="0.5" y="0.5" width="879" height="619" rx="14"/>
 
-  <text class="ink" x="32" y="44" font-size="19" font-weight="650">Skill dependency graph</text>
-  <text class="ink2" x="32" y="68" font-size="12.5">Arrows point to the skills each skill may use. Dependencies only flow downward, so they never form loops.</text>
+  <text class="ink" x="32" y="44" font-size="19" font-weight="650">Skills overview</text>
+  <text class="ink2" x="32" y="68" font-size="12.5">Arrows point to the skills each skill may use, and only flow downward, so they never form loops. Modes stand outside that flow.</text>
 
-  <!-- lowband: a skill that is a mode — its card sits on the wrapper it creates -->
+  <!-- modes: lowband and readout — their cards sit on the wrapper they apply to -->
   <rect class="frame" x="32" y="110" width="608" height="476" rx="12"/>
-  <text class="ink2 halo" x="284" y="115" font-size="11.5">carries the information load · authority stays with you</text>
+  <rect class="label-bg" x="510" y="104" width="102" height="14"/>
+  <text class="ink2" x="516" y="115" font-size="11.5">modes, not steps</text>
   <g>
-    <rect class="node" x="52" y="81" width="216" height="58" rx="9"/>
+    <rect class="node" x="52" y="81" width="210" height="58" rx="9"/>
     <rect class="acc-mode" x="62" y="95" width="4" height="30" rx="2"/>
     <text class="mono ink" x="76" y="106" font-size="14" font-weight="600">lowband</text>
-    <text class="ink2" x="76" y="124" font-size="11">applies across the collaboration</text>
+    <text class="ink2" x="76" y="124" font-size="11">carries the information load</text>
+  </g>
+  <g>
+    <rect class="node" x="286" y="81" width="210" height="58" rx="9"/>
+    <rect class="acc-mode" x="296" y="95" width="4" height="30" rx="2"/>
+    <text class="mono ink" x="310" y="106" font-size="14" font-weight="600">readout</text>
+    <text class="ink2" x="310" y="124" font-size="11">reports you can read in one pass</text>
   </g>
 
   <!-- edges -->
@@ -137,8 +146,12 @@
     <text class="mono ink2" x="664" y="322" font-size="10.5">/ctx-research … | /to-ctx</text>
     <text class="mono ink2" x="664" y="340" font-size="10.5">/ctx-research … | /handoff</text>
     <text class="mono ink2" x="664" y="358" font-size="10.5">/fan-out … | /to-ctx</text>
-    <text class="ink2" x="664" y="384" font-size="10.5">lowband does not enter a</text>
-    <text class="ink2" x="664" y="399" font-size="10.5">pipe; once on, it applies</text>
-    <text class="ink2" x="664" y="414" font-size="10.5">to the whole chain.</text>
+    <text class="ink2" x="664" y="384" font-size="10.5">Modes are not pipe steps.</text>
+    <text class="ink2" x="664" y="399" font-size="10.5">Once on, they apply to the</text>
+    <text class="ink2" x="664" y="414" font-size="10.5">whole chain until you turn</text>
+    <text class="ink2" x="664" y="429" font-size="10.5">them off.</text>
+    <text class="ink2" x="664" y="452" font-size="10.5">readout can also be copied</text>
+    <text class="ink2" x="664" y="467" font-size="10.5">into AGENTS.md / CLAUDE.md</text>
+    <text class="ink2" x="664" y="482" font-size="10.5">to apply without invoking.</text>
   </g>
 </svg>

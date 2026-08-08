@@ -8,7 +8,7 @@
 
 A set of dev skills I use day to day in agentic engineering.
 
-![Skill dependency graph](./assets/dependency-graph.svg)
+![Skills overview](./assets/overview.svg)
 
 ## Install
 
@@ -29,6 +29,7 @@ Or as a Claude Code plugin (skills are then namespaced, e.g. `/devai:handoff`):
 |---|---|
 | have a goal worth hours of autonomous work: agree on the spec and acceptance checks together, let the agent run, then review the report | `/long-horizon` |
 | are mentally drained but the work must keep moving: the agent reports only what matters and turns the decisions only you can make into two-option questions with a recommendation | `/lowband` |
+| find the agent's replies tiring to read: it writes one claim per sentence, keeps the action in the verb, and ties each uncertainty to the claim it belongs to | `/readout` |
 | want to hand the current task to another agent or session without duplicating existing documents, so it can start working immediately | `/handoff` |
 | want the task split across several subagents in parallel, but only after checking that the split is actually worth it | `/fan-out` |
 | need deep research that starts from your project's existing documents and writes verified findings back into them | `/ctx-research` |
@@ -60,6 +61,18 @@ lowband applies to the whole collaboration rather than joining a pipeline as ano
 
 But one thing never changes: **the information-processing load can move toward the agent; authority cannot.** Deleting, publishing, deploying, spending, and sending anything external still require your explicit approval in every mode.
 
+### readout: the problem is density, not length
+
+The obvious diagnosis of hard-to-read agent output is that there is too much of it. That is usually wrong. Human writing often runs longer; what makes an agent's report tiring is how much it packs into each sentence. Three claims arrive inside one clause, and you resolve them one at a time before any of them can be banked.
+
+readout is a small set of sentence-level rules aimed at exactly that: one claim per sentence, the action in the verb, known information before new, and uncertainty tied to the claim it belongs to rather than sprayed over everything. Metaphor is held to a threshold. An analogy is allowed only when you can name what corresponds to what, and only when the reader does not already hold the model you would be mapping onto.
+
+Every rule states its reason, and none of them is a banned-word list. That is deliberate. A blacklist has to be enforced, and the place this skill most needs to work is a plain markdown file that no enforcement mechanism protects. A rule that explains the cost it saves the reader survives being pasted somewhere with nobody watching; a rule that only forbids does not.
+
+That is also how it ships. Invoke `/readout` and it stays on for the rest of the session. Copy the body into `AGENTS.md` or `CLAUDE.md` and it applies from the first turn, in any tool that reads those files. The body is written to stand on its own, so both paths give the same result.
+
+One line does not move: **readout governs how things are said, never what may be concluded.** No rule in it licenses softening a finding or reporting a result you did not get.
+
 ### The rest: composable atoms
 
 The remaining skills are more conventional. I wrote my own versions so they can form a coherent system and evolve together.
@@ -75,7 +88,7 @@ These atoms stay small enough to compose into concrete scenarios with pipes. The
 /fan-out <task> | /to-ctx          # dispatch, then file the integrated result
 ```
 
-Dependencies only flow downward, so they cannot form loops; the graph at the top shows the complete structure. English `skills/` is the source of truth, while `skills-zh/` is its Chinese mirror under the same names. Install the pack that matches the language you normally use with your agent.
+Dependencies only flow downward, so they cannot form loops; the graph at the top shows the complete structure. English `skills/` is the source of truth, while `skills-zh/` holds its Chinese counterpart under the same names. Most of the time the Chinese version is a translation. `readout` is the exception: writing defects such as verb-into-noun conversion and stacked four-character set phrases only exist in Chinese, so `skills-zh/readout` carries the English rules plus a section for them. Install the pack that matches the language you normally use with your agent.
 
 > [!Note]
 > **TODO**: a set of best-practice examples is coming, using real scenarios to show how these skills compose.

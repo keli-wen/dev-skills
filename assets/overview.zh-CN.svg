@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="880" height="620" viewBox="0 0 880 620" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" role="img" aria-label="Skill 依赖关系图">
-  <title>Skill 依赖关系图</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="620" viewBox="0 0 880 620" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" role="img" aria-label="Skill 总览">
+  <title>Skill 总览</title>
   <style>
     .surface { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); }
     .node    { fill: #ffffff; stroke: rgba(11,11,11,0.10); }
@@ -15,6 +15,7 @@
     .acc-aqua   { fill: #1baf7a; }
     .acc-yellow { fill: #eda100; }
     .acc-mode   { fill: #898781; }
+    .label-bg   { fill: #fcfcfb; }
     .mono { font-family: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace; }
     @media (prefers-color-scheme: dark) {
       .surface { fill: #1a1a19; stroke: rgba(255,255,255,0.10); }
@@ -26,6 +27,7 @@
       .acc-orange { fill: #d95926; }
       .acc-aqua   { fill: #199e70; }
       .acc-yellow { fill: #c98500; }
+      .label-bg   { fill: #1a1a19; }
     }
   </style>
   <defs>
@@ -36,17 +38,24 @@
 
   <rect class="surface" x="0.5" y="0.5" width="879" height="619" rx="14"/>
 
-  <text class="ink" x="32" y="44" font-size="19" font-weight="650">Skill 依赖关系图</text>
-  <text class="ink2" x="32" y="68" font-size="12.5">箭头指向一个 skill 可以调用的对象。依赖只向下，不向平级或上层，因此不会成环。</text>
+  <text class="ink" x="32" y="44" font-size="19" font-weight="650">Skill 总览</text>
+  <text class="ink2" x="32" y="68" font-size="12.5">箭头指向一个 skill 可以调用的对象。依赖只向下，不向平级或上层，因此不会成环。模式不在这条依赖链上。</text>
 
-  <!-- lowband：本身是 skill，同时是作用于整段协作的模式 -->
+  <!-- 模式：lowband 与 readout，卡片嵌在它们作用的范围上 -->
   <rect class="frame" x="32" y="110" width="608" height="476" rx="12"/>
-  <text class="ink2 halo" x="284" y="115" font-size="11.5">分担信息负担 · 授权仍由你掌握</text>
+  <rect class="label-bg" x="518" y="104" width="104" height="14"/>
+  <text class="ink2" x="524" y="115" font-size="11.5">是模式，不是环节</text>
   <g>
-    <rect class="node" x="52" y="81" width="216" height="58" rx="9"/>
+    <rect class="node" x="52" y="81" width="210" height="58" rx="9"/>
     <rect class="acc-mode" x="62" y="95" width="4" height="30" rx="2"/>
     <text class="mono ink" x="76" y="106" font-size="14" font-weight="600">lowband</text>
-    <text class="ink2" x="76" y="124" font-size="11">作用于整段协作</text>
+    <text class="ink2" x="76" y="124" font-size="11">分担信息负担</text>
+  </g>
+  <g>
+    <rect class="node" x="286" y="81" width="210" height="58" rx="9"/>
+    <rect class="acc-mode" x="296" y="95" width="4" height="30" rx="2"/>
+    <text class="mono ink" x="310" y="106" font-size="14" font-weight="600">readout</text>
+    <text class="ink2" x="310" y="124" font-size="11">让汇报一遍就能读懂</text>
   </g>
 
   <!-- 依赖边 -->
@@ -137,8 +146,11 @@
     <text class="mono ink2" x="664" y="322" font-size="10.5">/ctx-research … | /to-ctx</text>
     <text class="mono ink2" x="664" y="340" font-size="10.5">/ctx-research … | /handoff</text>
     <text class="mono ink2" x="664" y="358" font-size="10.5">/fan-out … | /to-ctx</text>
-    <text class="ink2" x="664" y="384" font-size="10.5">lowband 不进入管道；</text>
-    <text class="ink2" x="664" y="399" font-size="10.5">开启后，它作用于整条</text>
-    <text class="ink2" x="664" y="414" font-size="10.5">协作链。</text>
+    <text class="ink2" x="664" y="384" font-size="10.5">模式不是管道里的环节。</text>
+    <text class="ink2" x="664" y="399" font-size="10.5">一旦开启就作用于整条</text>
+    <text class="ink2" x="664" y="414" font-size="10.5">协作链，直到你关掉它。</text>
+    <text class="ink2" x="664" y="437" font-size="10.5">readout 也可以整段贴进</text>
+    <text class="ink2" x="664" y="452" font-size="10.5">AGENTS.md / CLAUDE.md，</text>
+    <text class="ink2" x="664" y="467" font-size="10.5">不用调用就一直生效。</text>
   </g>
 </svg>
