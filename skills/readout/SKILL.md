@@ -1,6 +1,6 @@
 ---
 name: readout
-description: Write replies and work reports a person can take in on one read — one claim per sentence, action in the verb, uncertainty attached to the claim it belongs to. Use for /readout, "make your reports readable", "your output is hard to read", "stop writing like an AI", or when a run's reporting style needs fixing. The body below is standalone prose: paste it into AGENTS.md or CLAUDE.md to apply it every turn instead of on invocation.
+description: Write replies and work reports a person can take in on one read — one claim per sentence, action in the verb, uncertainty attached to the claim it belongs to. Use for /readout, "make your reports readable", "your output is hard to read", "stop writing like an AI", or when a run's reporting style needs fixing. The body below is standalone prose — paste it into AGENTS.md or CLAUDE.md to apply it every turn instead of on invocation.
 metadata:
   short-description: Readable, declarative agent reporting
 ---
