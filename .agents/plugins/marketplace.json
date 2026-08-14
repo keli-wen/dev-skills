@@ -1,0 +1,19 @@
+{
+  "name": "dev-skills",
+  "interface": {
+    "displayName": "Dev Agent Skills"
+  },
+  "plugins": [
+    {
+      "name": "devai",
+      "source": {
+        "source": "local",
+        "path": "."
+      },
+      "policy": {
+        "installation": "AVAILABLE"
+      },
+      "category": "Engineering"
+    }
+  ]
+}

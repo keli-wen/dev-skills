@@ -1,6 +1,7 @@
 {
   "name": "devai",
   "displayName": "Dev Agent Skills",
+  "version": "0.1.0",
   "description": "Dev skills for agentic engineering: long-horizon execution, fan-out dispatch, handoff, context research, plan grilling, and a low-bandwidth collaboration mode.",
   "author": {
     "name": "Keli Wen",
