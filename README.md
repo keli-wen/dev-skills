@@ -30,6 +30,7 @@ Or as a Claude Code plugin (skills are then namespaced, e.g. `/devai:handoff`):
 | have a goal worth hours of autonomous work: agree on the spec and acceptance checks together, let the agent run, then review the report | `/long-horizon` |
 | are mentally drained but the work must keep moving: the agent reports only what matters and turns the decisions only you can make into two-option questions with a recommendation | `/lowband` |
 | find the agent's replies tiring to read: it writes one claim per sentence, keeps the action in the verb, and ties each uncertainty to the claim it belongs to | `/readout` |
+| are only asking a question and want an analyzed answer, without the agent starting to "fix" anything — one turn, then back to normal | `/just-ask` |
 | want to hand the current task to another agent or session without duplicating existing documents, so it can start working immediately | `/handoff` |
 | want the task split across several subagents in parallel, but only after checking that the split is actually worth it | `/fan-out` |
 | need deep research that starts from your project's existing documents and writes verified findings back into them | `/ctx-research` |
@@ -76,6 +77,8 @@ One line does not move: **readout governs how things are said, never what may be
 ### The rest: composable atoms
 
 The remaining skills are more conventional. I wrote my own versions so they can form a coherent system and evolve together.
+
+`just-ask` is the smallest atom. It compresses one prompt you would otherwise retype — "I'm only asking; investigate read-only and answer, don't touch anything" — into a single command, because an agent deep in a working context tends to treat every message as the next task. It is the mirror image of the modes: where lowband and readout stay on until turned off, `/just-ask` covers exactly one turn.
 
 The `ctx-*` family includes `ctx-research` for research, `ctx-grill` for interrogation, and `to-ctx` for filing. They share one contract: **read the project's durable context documents before acting, then write back conclusions worth keeping.** A question those documents already answer is never asked again (`ctx-grill`'s interview engine is adapted from `grilling` in mattpocock/skills, MIT). `handoff` compresses the current task into something the next agent can start from directly. It points to existing documents and carries only the new information instead of duplicating the source of truth.
 

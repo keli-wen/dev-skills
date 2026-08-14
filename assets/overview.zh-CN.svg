@@ -153,4 +153,13 @@
     <text class="ink2" x="664" y="452" font-size="10.5">AGENTS.md / CLAUDE.md，</text>
     <text class="ink2" x="664" y="467" font-size="10.5">不用调用就一直生效。</text>
   </g>
+
+  <!-- 一次性：只管一个回合，位于流程之外 -->
+  <g>
+    <text class="muted" x="664" y="512" font-size="10.5" letter-spacing="1.2">一次性，不是模式</text>
+    <rect class="node" x="664" y="522" width="184" height="58" rx="9"/>
+    <rect class="acc-mode" x="674" y="536" width="4" height="30" rx="2"/>
+    <text class="mono ink" x="688" y="547" font-size="14" font-weight="600">just-ask</text>
+    <text class="ink2" x="688" y="565" font-size="11">只回答，只管这一轮</text>
+  </g>
 </svg>
