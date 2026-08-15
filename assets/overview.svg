@@ -39,12 +39,12 @@
   <rect class="surface" x="0.5" y="0.5" width="879" height="619" rx="14"/>
 
   <text class="ink" x="32" y="44" font-size="19" font-weight="650">Skills overview</text>
-  <text class="ink2" x="32" y="68" font-size="12.5">Arrows point to the skills each skill may use, and only flow downward, so they never form loops. Modes stand outside that flow.</text>
+  <text class="ink2" x="32" y="68" font-size="12.5">Dependencies only point at more basic skills, so they never form cycles. Modes sit outside the chain and switch how the agent works.</text>
 
   <!-- modes: lowband and readout — their cards sit on the wrapper they apply to -->
   <rect class="frame" x="32" y="110" width="608" height="476" rx="12"/>
-  <rect class="label-bg" x="510" y="104" width="102" height="14"/>
-  <text class="ink2" x="516" y="115" font-size="11.5">modes, not steps</text>
+  <rect class="label-bg" x="496" y="104" width="126" height="14"/>
+  <text class="ink2" x="502" y="115" font-size="11.5">switch agent behavior</text>
   <g>
     <rect class="node" x="52" y="81" width="210" height="58" rx="9"/>
     <rect class="acc-mode" x="62" y="95" width="4" height="30" rx="2"/>
@@ -105,7 +105,7 @@
     <rect class="node" x="72" y="386" width="170" height="58" rx="9"/>
     <rect class="acc-orange" x="82" y="400" width="4" height="30" rx="2"/>
     <text class="mono ink" x="96" y="411" font-size="14" font-weight="600">fan-out</text>
-    <text class="ink2" x="96" y="429" font-size="11">multi-agent task dispatch</text>
+    <text class="ink2" x="96" y="429" font-size="11">multi-agent work mode</text>
   </g>
   <g>
     <rect class="node" x="436" y="386" width="140" height="58" rx="9"/>
@@ -146,13 +146,11 @@
     <text class="mono ink2" x="664" y="322" font-size="10.5">/ctx-research … | /to-ctx</text>
     <text class="mono ink2" x="664" y="340" font-size="10.5">/ctx-research … | /handoff</text>
     <text class="mono ink2" x="664" y="358" font-size="10.5">/fan-out … | /to-ctx</text>
-    <text class="ink2" x="664" y="384" font-size="10.5">Modes are not pipe steps.</text>
-    <text class="ink2" x="664" y="399" font-size="10.5">Once on, they apply to the</text>
-    <text class="ink2" x="664" y="414" font-size="10.5">whole chain until you turn</text>
-    <text class="ink2" x="664" y="429" font-size="10.5">them off.</text>
-    <text class="ink2" x="664" y="452" font-size="10.5">readout can also be copied</text>
-    <text class="ink2" x="664" y="467" font-size="10.5">into AGENTS.md / CLAUDE.md</text>
-    <text class="ink2" x="664" y="482" font-size="10.5">to apply without invoking.</text>
+    <text class="ink2" x="664" y="384" font-size="10.5">Once on, a mode applies to</text>
+    <text class="ink2" x="664" y="399" font-size="10.5">every turn until turned off.</text>
+    <text class="ink2" x="664" y="422" font-size="10.5">Paste readout's body into</text>
+    <text class="ink2" x="664" y="437" font-size="10.5"><tspan class="mono">AGENTS.md</tspan> / <tspan class="mono">CLAUDE.md</tspan></text>
+    <text class="ink2" x="664" y="452" font-size="10.5">to apply without invoking.</text>
   </g>
 
   <!-- one-shot: covers exactly one turn, outside the flow -->
@@ -161,6 +159,6 @@
     <rect class="node" x="664" y="522" width="184" height="58" rx="9"/>
     <rect class="acc-mode" x="674" y="536" width="4" height="30" rx="2"/>
     <text class="mono ink" x="688" y="547" font-size="14" font-weight="600">just-ask</text>
-    <text class="ink2" x="688" y="565" font-size="11">answer only, one turn</text>
+    <text class="ink2" x="688" y="565" font-size="11">read-only answer, hands off</text>
   </g>
 </svg>
