@@ -159,6 +159,6 @@
     <rect class="node" x="664" y="522" width="184" height="58" rx="9"/>
     <rect class="acc-mode" x="674" y="536" width="4" height="30" rx="2"/>
     <text class="mono ink" x="688" y="547" font-size="14" font-weight="600">just-ask</text>
-    <text class="ink2" x="688" y="565" font-size="11">只读回答，不直接上手</text>
+    <text class="ink2" x="688" y="565" font-size="11">让 agent 只答不动手</text>
   </g>
 </svg>

@@ -49,13 +49,13 @@
     <rect class="node" x="52" y="81" width="210" height="58" rx="9"/>
     <rect class="acc-mode" x="62" y="95" width="4" height="30" rx="2"/>
     <text class="mono ink" x="76" y="106" font-size="14" font-weight="600">lowband</text>
-    <text class="ink2" x="76" y="124" font-size="11">carries the information load</text>
+    <text class="ink2" x="76" y="124" font-size="11">works in low-bandwidth mode</text>
   </g>
   <g>
     <rect class="node" x="286" y="81" width="210" height="58" rx="9"/>
     <rect class="acc-mode" x="296" y="95" width="4" height="30" rx="2"/>
     <text class="mono ink" x="310" y="106" font-size="14" font-weight="600">readout</text>
-    <text class="ink2" x="310" y="124" font-size="11">reports you can read in one pass</text>
+    <text class="ink2" x="310" y="124" font-size="11">makes agent replies readable</text>
   </g>
 
   <!-- edges -->
@@ -83,7 +83,7 @@
     <rect class="node" x="240" y="156" width="200" height="58" rx="9"/>
     <rect class="acc-yellow" x="250" y="170" width="4" height="30" rx="2"/>
     <text class="mono ink" x="264" y="181" font-size="14" font-weight="600">long-horizon</text>
-    <text class="ink2" x="264" y="199" font-size="11">spec-gated autonomous run</text>
+    <text class="ink2" x="264" y="199" font-size="11">delivers a goal end to end</text>
   </g>
 
   <!-- layer 1: entry orchestrators -->
@@ -97,7 +97,7 @@
     <rect class="node" x="452" y="268" width="156" height="58" rx="9"/>
     <rect class="acc-blue" x="462" y="282" width="4" height="30" rx="2"/>
     <text class="mono ink" x="476" y="293" font-size="14" font-weight="600">ctx-grill</text>
-    <text class="ink2" x="476" y="311" font-size="11">plan stress test</text>
+    <text class="ink2" x="476" y="311" font-size="11">context-aware grilling</text>
   </g>
 
   <!-- layer 2 -->
@@ -111,7 +111,7 @@
     <rect class="node" x="436" y="386" width="140" height="58" rx="9"/>
     <rect class="acc-blue" x="446" y="400" width="4" height="30" rx="2"/>
     <text class="mono ink" x="460" y="411" font-size="14" font-weight="600">to-ctx</text>
-    <text class="ink2" x="460" y="429" font-size="11">durable write path</text>
+    <text class="ink2" x="460" y="429" font-size="11">persists conclusions</text>
   </g>
 
   <!-- layer 3 -->
@@ -119,7 +119,7 @@
     <rect class="node" x="152" y="504" width="160" height="58" rx="9"/>
     <rect class="acc-aqua" x="162" y="518" width="4" height="30" rx="2"/>
     <text class="mono ink" x="176" y="529" font-size="14" font-weight="600">handoff</text>
-    <text class="ink2" x="176" y="547" font-size="11">minimal-sufficient handoff</text>
+    <text class="ink2" x="176" y="547" font-size="11">minimal-sufficient context</text>
   </g>
 
   <!-- legend -->
@@ -159,6 +159,6 @@
     <rect class="node" x="664" y="522" width="184" height="58" rx="9"/>
     <rect class="acc-mode" x="674" y="536" width="4" height="30" rx="2"/>
     <text class="mono ink" x="688" y="547" font-size="14" font-weight="600">just-ask</text>
-    <text class="ink2" x="688" y="565" font-size="11">read-only answer, hands off</text>
+    <text class="ink2" x="688" y="565" font-size="11">agent answers, hands off</text>
   </g>
 </svg>
