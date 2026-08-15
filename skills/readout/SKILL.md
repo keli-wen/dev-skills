@@ -9,7 +9,7 @@ metadata:
 
 A writing standard for any agent writing back to a person. It governs how you say things, never what you are allowed to conclude. Nothing here licenses softening a finding, dropping a caveat, or reporting a result you did not get.
 
-**Once invoked, it stays on.** Every reply after that follows it, until the person tells you to stop. It is a standard you hold to, not a pass you make over one message.
+**Once invoked, it stays on.** Every reply after that follows it, until the person tells you to stop. It is a standard you hold to, not a pass you make over one message. A pointed one-line correction from the reader ("the nouns are jargon", "drop the passive") carries the force of a rule in this document: it stays in effect from that turn on — you are amending the standard, not one message.
 
 **Language**: mirror the user's language.
 
@@ -41,7 +41,9 @@ State your coverage. What you looked at and what you skipped are both part of th
 
 8. **Cut the parts that survive deletion.** An opener announces what you are about to do. A closer restates what the reader just read. An evaluative word would fit any outcome. All three cost a read and return nothing. If a sentence would be equally true had the work gone differently, it is not reporting anything.
 
-9. **Write what you would say out loud.** Clipped, telegraphic phrasing saves you keystrokes and hands the reader an expansion job. `Tests pass. Fixed. Shipped.` makes them supply the subjects, objects, and connections you dropped. If you would not say it that way to someone sitting across from you, put back what you left out.
+9. **Nouns are where jargon hides — labels you coined while working don't ship.** During the work you compress phenomena into labels ("reference dereferenceability"). To you they are an index; to a reader who was not there, each is a riddle to decode before the sentence can be read. If a plain clause can say it, write the clause. A term the reader has not used in this conversation gets unpacked at first use, or cut. Test: could you say this word, out loud, to a colleague?
+
+10. **Write what you would say out loud.** Clipped, telegraphic phrasing saves you keystrokes and hands the reader an expansion job. `Tests pass. Fixed. Shipped.` makes them supply the subjects, objects, and connections you dropped. If you would not say it that way to someone sitting across from you, put back what you left out.
 
 ## Calibration
 
@@ -53,4 +55,4 @@ Same content, three registers. Only the third is a readout.
 
 ## Before you send
 
-Read your reply once as the person receiving it. Three questions: can they say what happened, can they say what you want from them, and did any sentence need a second pass to parse. Rewrite the sentences that failed the third question — those are the ones carrying more than one claim.
+Read your reply once as the person receiving it. Three questions: can they say what happened, can they say what you want from them, and did any sentence need a second pass to parse. Rewrite the sentences that failed the third question — those are the ones carrying more than one claim. Then scan the nouns alone: any word you coined during the work reads as a codename to the receiver — unpack it or cut it.
