@@ -6,7 +6,7 @@
 
 [中文版 README](./README.zh-CN.md)
 
-A set of dev skills I use day to day in agentic engineering.
+A set of dev skills I use day to day in agentic engineering, focused on multi-agent-driven work modes and long-horizon autonomous tasks.
 
 ![Skills overview](./assets/overview.svg)
 

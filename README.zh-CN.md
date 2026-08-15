@@ -6,7 +6,7 @@
 
 [English README](./README.md)
 
-这是一组我日常在 agentic engineering 中使用的 dev skills。
+这是一组我日常在 agentic engineering 中使用的 dev skills，重点是多智能体驱动的工作模式与长程自主任务。
 
 ![Skill 总览](./assets/overview.zh-CN.svg)
 

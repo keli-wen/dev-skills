@@ -4,12 +4,12 @@
     "name": "Keli Wen",
     "url": "https://github.com/keli-wen"
   },
-  "description": "Dev skills I use day to day in agentic engineering.",
+  "description": "Dev skills I use day to day in agentic engineering, focused on multi-agent-driven work modes and long-horizon autonomous tasks.",
   "plugins": [
     {
       "name": "devai",
       "source": "./",
-      "description": "Dev skills for agentic engineering: long-horizon execution, fan-out dispatch, handoff, context research, plan grilling, and a low-bandwidth collaboration mode.",
+      "description": "Dev skills I use day to day in agentic engineering, focused on multi-agent-driven work modes and long-horizon autonomous tasks. Includes long-horizon, fan-out, handoff, ctx-research, ctx-grill, to-ctx, just-ask, and the lowband and readout modes.",
       "tags": ["agent-skills", "long-horizon", "multi-agent", "context-engineering"]
     }
   ]

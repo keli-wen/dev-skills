@@ -1,7 +1,7 @@
 {
   "name": "devai",
   "version": "0.1.1",
-  "description": "Dev skills for agentic engineering: long-horizon execution, fan-out dispatch, handoff, context research, plan grilling, one-shot answer-only turns, and low-bandwidth collaboration and readable-output modes.",
+  "description": "Dev skills I use day to day in agentic engineering, focused on multi-agent-driven work modes and long-horizon autonomous tasks. Includes long-horizon, fan-out, handoff, ctx-research, ctx-grill, to-ctx, just-ask, and the lowband and readout modes.",
   "author": {
     "name": "Keli Wen",
     "url": "https://github.com/keli-wen"
