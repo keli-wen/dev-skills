@@ -12,16 +12,51 @@ A set of dev skills I use day to day in agentic engineering, focused on multi-ag
 
 ## Install
 
+Choose the pack you want the agent to read. The two packs use the same skill names, but their instructions and natural-language triggers are written separately; install one, not both.
+
+English:
+
 ```bash
 npx skills@latest add keli-wen/dev-skills
 ```
 
-Or as a Claude Code plugin (skills are then namespaced, e.g. `/devai:handoff`):
+Chinese:
 
+```bash
+npx skills@latest add https://github.com/keli-wen/dev-skills/tree/master/skills-zh
 ```
-/plugin marketplace add keli-wen/dev-skills
-/plugin install devai@dev-skills
+
+The commands above install ordinary, unnamespaced skills. Both packs are also available as namespaced plugins.
+
+English plugin for Codex:
+
+```bash
+codex plugin marketplace add keli-wen/dev-skills
+codex plugin add devai@dev-skills
 ```
+
+English plugin for Claude Code:
+
+```bash
+claude plugin marketplace add keli-wen/dev-skills
+claude plugin install devai@dev-skills
+```
+
+Chinese plugin for Codex:
+
+```bash
+codex plugin marketplace add keli-wen/dev-skills --ref zh
+codex plugin add devai@dev-skills-zh
+```
+
+Chinese plugin for Claude Code:
+
+```bash
+claude plugin marketplace add keli-wen/dev-skills@zh
+claude plugin install devai@dev-skills-zh
+```
+
+See [the installation guide](./INSTALL.md) for global and project installs, namespace behavior, and language switching.
 
 ## Skills
 
@@ -91,7 +126,7 @@ These atoms stay small enough to compose into concrete scenarios with pipes. The
 /fan-out <task> | /to-ctx          # dispatch, then file the integrated result
 ```
 
-Dependencies only flow downward, so they cannot form loops; the graph at the top shows the complete structure. English `skills/` is the source of truth, while `skills-zh/` holds its Chinese counterpart under the same names. Most of the time the Chinese version is a translation. `readout` is the exception: writing defects such as verb-into-noun conversion and stacked four-character set phrases only exist in Chinese, so `skills-zh/readout` carries the English rules plus a section for them. Install the pack that matches the language you normally use with your agent.
+Dependencies only flow downward, so they cannot form loops; the graph at the top shows the complete structure. English `skills/` is the source of truth, while `skills-zh/` holds its Chinese counterpart under the same names. The packs remain separate so each language gets its own instructions, triggers, and examples without loading the other language's writing rules. Most of the time the Chinese version is a translation. `readout` is the exception: writing defects such as verb-into-noun conversion and stacked four-character set phrases only exist in Chinese, so `skills-zh/readout` carries the shared principles plus rules written specifically for Chinese.
 
 > [!Note]
 > **TODO**: a set of best-practice examples is coming, using real scenarios to show how these skills compose.

@@ -18,7 +18,12 @@
   "interface": {
     "displayName": "Dev Agent Skills",
     "shortDescription": "Dev skills for agentic engineering",
+    "longDescription": "Reusable skills for long-horizon work, multi-agent coordination, context-aware research, handoffs, and clearer agent collaboration.",
     "developerName": "Keli Wen",
-    "category": "Engineering"
+    "category": "Engineering",
+    "capabilities": ["Instructions"],
+    "defaultPrompt": [
+      "Use Dev Agent Skills to choose and run the right engineering workflow."
+    ]
   }
 }
