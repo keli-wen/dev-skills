@@ -22,13 +22,13 @@ Multi-agent costs are real: agents burn several times the tokens of a chat, mult
 ## Steps
 
 1. **Decompose along context coupling, not function.** The boundary between agents must sit where shared context is minimal. Never split by work stage (one agent implements, one tests, one reviews) — that cuts exactly where coupling is highest and turns the run into a game of telephone. Low-coupling slices split well: independent search paths, doc digestion, black-box verification, separate research angles. High-coupling work stays in one agent, usually you: core implementation, architecture decisions, anything whose choices silently constrain other work.
-2. **Pick the pattern by task type**:
-   - research / investigation → parallel explorers with distinct angles (by source, by subsystem, by time window); tell each to start wide, then narrow
-   - implementation across many sites → discover the full work list first, then one agent per site; worktree isolation when they mutate the same repo in parallel
-   - review / audit → dimension-parallel finders, then an adversarial verifier per finding
+2. **Pick the pattern by task type**. The first three have playbooks — read the referenced file before you dispatch in that mode, not after:
+   - research / investigation → parallel explorers with distinct angles (by source, by subsystem, by time window); tell each to start wide, then narrow. Read `references/research.md`.
+   - implementation across many sites → discover the full work list first, then one agent per site; worktree isolation when they mutate the same repo in parallel. Read `references/implement.md`.
+   - review / audit → dimension-parallel finders, then an adversarial verifier per finding. Read `references/review.md`.
    - design decision → 2–3 independent proposal agents with different priorities (MVP-first, risk-first, user-first), then a judge pass
    - debugging → parallel hypothesis testers, each trying to falsify one hypothesis
-   - any of the above → a black-box verification subagent is almost always worth adding: it needs only the acceptance criteria and the artifact, making it the cheapest, most reliable split there is
+   - any of the above → a black-box verification subagent is on by default — it needs only the acceptance criteria and the artifact — and is skipped only when the user explicitly opts out, never silently
 3. **Write each spawn prompt as a task contract** (handoff discipline): explicit objective, inputs by reference (paths / issues / URLs, not pasted content), expected output shape, boundaries (what NOT to touch), and a tool hint when the agent might pick wrong. Vague delegation produces duplicated or misdirected work.
    Reference versus inline is a capability tradeoff. A reference only works when the receiver can dereference it — it has read/search tools and access — and it pays off when the content is large, durable, or only partially needed: the sub-agent pulls exactly what it wants, just in time, and reads it fresh. Inline instead when the receiver has no tools, when the snippet costs less than a read, when an exact version must be pinned, or when the information exists only in this conversation — unpersisted context cannot be referenced, so inline it or persist it first (`/to-ctx`). The short form: **reference the durable, inline the delta.**
    Scale effort to complexity and say it in the contract: a simple lookup is one agent with a handful of tool calls; a comparison is two to four agents; only genuinely complex work justifies ten or more.
