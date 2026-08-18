@@ -12,51 +12,29 @@
 
 ## 安装
 
-先选语言包。两个版本的 skill 名称相同，但指令、自然语言触发词和写作规则各自维护；二选一，不要同时安装。
-
-中文版：
-
-```bash
-npx skills@latest add https://github.com/keli-wen/dev-skills/tree/master/skills-zh
-```
-
-英文版：
-
 ```bash
 npx skills@latest add keli-wen/dev-skills
 ```
 
-上面的命令安装普通 skill，调用时没有命名空间。两个语言包也都可以安装为带 `devai:` 命名空间的 plugin。
+这样装进来的是普通 skill，调用时没有命名空间。同一套也可以装成 plugin，此时 skill 归在 `devai` 命名空间下，`handoff` 变成 `devai:handoff`。
 
-中文版 plugin，Codex：
-
-```bash
-codex plugin marketplace add keli-wen/dev-skills --ref zh
-codex plugin add devai@dev-skills-zh
-```
-
-中文版 plugin，Claude Code：
-
-```bash
-claude plugin marketplace add keli-wen/dev-skills@zh
-claude plugin install devai@dev-skills-zh
-```
-
-英文版 plugin，Codex：
+Codex：
 
 ```bash
 codex plugin marketplace add keli-wen/dev-skills
 codex plugin add devai@dev-skills
 ```
 
-英文版 plugin，Claude Code：
+Claude Code：
 
 ```bash
 claude plugin marketplace add keli-wen/dev-skills
 claude plugin install devai@dev-skills
 ```
 
-全局安装、项目安装、命名空间差异和语言切换，见[完整安装说明](./INSTALL.zh-CN.md)。
+全局安装、项目安装和命名空间差异，见[完整安装说明](./INSTALL.zh-CN.md)。
+
+装进 agent 的是英文 `skills/`。仓库里的 `skills-zh/` 是它的中文镜像，skill 名称一一对应，用来读懂每条规则在讲什么。
 
 ## Skills
 
@@ -126,9 +104,9 @@ readout 就是针对这件事的一小组句子级规则：一句话只说一件
 /fan-out <任务> | /to-ctx         # 先派发，再归档整合结果
 ```
 
-它们之间的依赖只朝一个方向，不会成环，顶部的图展示了完整关系。英文 `skills/` 是事实源，`skills-zh/` 是同名的中文对应版本。两个语言包刻意分开维护，让各自的指令、触发词和示例保持纯净，不必加载另一种语言的写作规则。
+它们之间的依赖只朝一个方向，不会成环，顶部的图展示了完整关系。英文 `skills/` 是事实源，也是安装命令覆盖的那一份；`skills-zh/` 是它的中文镜像，skill 名称一一对应，跟着 `skills/` 走，不单独发行。
 
-多数情况下中文版就是翻译。`readout` 是例外：动作装进名词、四字格排比堆砌这类毛病只在中文里存在，所以 `skills-zh/readout` 在共用原则之外，还有一组专门针对中文的规则。
+镜像就是翻译，因为语言相关的写作规则英文包里也有一份。动作装进名词、四字格排比堆砌这类毛病只在中文里存在，所以 `readout` 把它们放在 `references/chinese.md`，只有用中文回复时才读进来。
 
 > [!Note]
 > **TODO**：之后会补充一组 best-practice 示例，用真实场景展示这些 skill 如何组合使用。

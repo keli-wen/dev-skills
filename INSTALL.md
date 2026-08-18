@@ -2,14 +2,7 @@
 
 [中文版](./INSTALL.zh-CN.md)
 
-Dev Agent Skills ships two deliberately separate language packs:
-
-| Pack | Source | Best for |
-|---|---|---|
-| English | `skills/` | Users who normally work with their agent in English |
-| Chinese | `skills-zh/` | Users who normally work with their agent in Chinese, including the Chinese-specific `readout` rules |
-
-Both packs use the same skill names. Install one pack, not both.
+Everything below installs `skills/`, the English pack. `skills-zh/` is its Chinese mirror, kept for reading rather than as a separate release; see [Reading the skills in Chinese](#reading-the-skills-in-chinese).
 
 ## Install as ordinary skills
 
@@ -17,39 +10,25 @@ This route works across agents supported by the `skills` CLI. Skills are install
 
 ### Project install
 
-Install the English pack into the current project:
+Install into the current project:
 
 ```bash
 npx skills@latest add keli-wen/dev-skills
 ```
 
-Install the Chinese pack into the current project:
-
-```bash
-npx skills@latest add https://github.com/keli-wen/dev-skills/tree/master/skills-zh
-```
-
 ### Global install
 
-Add `-g` to make the selected pack available across projects:
+Add `-g` to make the skills available across projects:
 
 ```bash
-# English
 npx skills@latest add keli-wen/dev-skills -g
-
-# Chinese
-npx skills@latest add https://github.com/keli-wen/dev-skills/tree/master/skills-zh -g
 ```
 
-The installer can target a specific agent with `-a`, for example `-a codex` or `-a claude-code`.
+The installer can target a specific agent with `-a`, for example `-a codex`, `-a claude-code`, or `-a gemini-cli`.
 
 ## Install as a plugin
 
 Plugin installation keeps the skills together under the `devai` namespace. For example, `handoff` appears as `devai:handoff`.
-
-### English plugin
-
-The English plugin is available today from the `dev-skills` marketplace.
 
 Codex:
 
@@ -67,27 +46,8 @@ claude plugin install devai@dev-skills
 
 These are terminal commands. You do not need to start an interactive Codex or Claude Code session first.
 
-### Chinese plugin
+## Reading the skills in Chinese
 
-The Chinese plugin is published from the `zh` branch of the same repository. Its marketplace is named `dev-skills-zh`, while the plugin remains `devai`.
+`skills-zh/` holds a Chinese mirror of every skill under the same names. It exists so Chinese-speaking users can read what each rule actually says; the agent itself does not need it. The English pack already mirrors the user's language when it replies, and it carries the Chinese-specific writing rules in `skills/readout/references/chinese.md`.
 
-```bash
-# Codex
-codex plugin marketplace add keli-wen/dev-skills --ref zh
-codex plugin add devai@dev-skills-zh
-
-# Claude Code
-claude plugin marketplace add keli-wen/dev-skills@zh
-claude plugin install devai@dev-skills-zh
-```
-
-## Switching languages
-
-The English and Chinese packs intentionally reuse the same skill and plugin names. Remove the installed pack before installing the other language so two definitions do not compete for the same name.
-
-The language suffix belongs to the distribution source, not the plugin identity:
-
-- English: `devai@dev-skills`
-- Chinese, published from the `zh` branch: `devai@dev-skills-zh`
-
-Both plugin distributions expose the `devai` namespace.
+The mirror follows `skills/` and has no install path of its own. Nothing stops you from installing it, but the skill names collide with the English pack, so remove one before adding the other.
