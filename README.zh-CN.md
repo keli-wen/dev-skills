@@ -65,7 +65,7 @@ claude plugin install devai@dev-skills
 
 这里我刻意规定的是 **Contract, not Template**。报告必须包含哪些信息、数据如何与渲染分离，这些属于 contract；至于页面具体长什么样，则交给 agent 自己决定。随着模型能力增长，提前 hardcode 一套视觉模板反而会限制它的表达，所以我更愿意约束「必须讲清楚什么」，而不是规定「必须画成什么样」。
 
-这是我最想做好的一个 skill，目前仍在用自己的真实任务持续迭代。它如何一步步演化到现在，包括一次实测如何推动整个设计重构，都记录在 [RELEASE_LOG.md](./RELEASE_LOG.md) 中（英文）。
+这是我最想做好的一个 skill，目前仍在用自己的真实任务持续迭代——其中一次实测直接推动了整个设计重构。
 
 ### lowband：把信息处理交给 agent
 

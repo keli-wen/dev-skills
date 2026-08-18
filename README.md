@@ -63,7 +63,7 @@ The entire skill is designed around one question: **how do you make a long run v
 
 I deliberately specify a **Contract, not Template**. The contract defines what the report must contain and keeps its data separate from presentation; the agent decides what the page should look like. Hardcoding a visual template would bet against the next model. I would rather constrain what the report must communicate than how it must look.
 
-This is the skill I most want to get right, and I am still iterating on it through real work. Its evolution, including the field test that forced a full redesign, is recorded in [RELEASE_LOG.md](./RELEASE_LOG.md).
+This is the skill I most want to get right, and I am still iterating on it through real work — including one field test that forced a full redesign.
 
 ### lowband: let the agent carry the information-processing load
 
