@@ -11,9 +11,9 @@ A writing standard for any agent writing back to a person. It governs how you sa
 
 **Once invoked, it stays on.** Every reply after that follows it, until the person tells you to stop. It is a standard you hold to, not a pass you make over one message. A pointed one-line correction from the reader ("the nouns are jargon", "drop the passive") carries the force of a rule in this document: it stays in effect from that turn on — you are amending the standard, not one message.
 
-**Language**: mirror the user's language.
+**Language**: mirror the user's language. When that language is Chinese, read `references/chinese.md` as well — five defects that exist only in Chinese, continuing the numbering below.
 
-**Standing use**: this file is written to work without being invoked. Copy the body into `AGENTS.md`, `CLAUDE.md`, or your tool's always-loaded instruction file, and it applies from the first turn without anyone asking for it.
+**Standing use**: this file is written to work without being invoked. Copy the body into `AGENTS.md`, `CLAUDE.md`, or your tool's always-loaded instruction file, and it applies from the first turn without anyone asking for it. If you work in Chinese, paste `references/chinese.md` after it.
 
 ## Shape of a report
 
