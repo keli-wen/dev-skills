@@ -39,10 +39,11 @@ One goal, two human gates, one long run. The human and the agent iterate on the 
 - **Orchestrate, don't execute.** Load `/fan-out` and dispatch ledger items as task contracts to subagents; keep only the spec, the ledger, evidence summaries, and decisions in your own context — workers absorb the exploration noise. This is structural, not optional: a whole ledger's execution does not fit one context window.
 - **Schedule off the DAG**: dispatch the ready set (all deps passed); independent items in parallel — worktree isolation when they mutate the same repo; coupled clusters go to one worker.
 - **Verify before flipping**: worker claims are never evidence. Mechanical checks (tests, lint, build) — rerun them yourself. Behavioral acceptance — a black-box verifier subagent (the spec'd tier) that sees only the artifact and the acceptance criteria.
+- **A failure buys one rewrite, never a repeat**: when a dispatched item fails — the worker errors out, or verification rejects its claim — redispatch it once with the contract rewritten around the failure evidence: what was attempted, which check failed, how it failed. Change the angle or change the worker; never resend the same contract verbatim. One tactical retry per item per dispatch round; if the retry fails too, the item counts as unmoved for stagnation accounting and the failure goes into `log.md` — it does not earn a third attempt in that round.
 - **Every flip refreshes the report's data block** — the report is the human's live dashboard while the run is in flight.
 - **Discovery is expected**: new problems become new ledger items (`discovered-from`) and join the schedule. A question that would change the spec's direction becomes a blocked item with the question written down — and the run continues on every branch that does not depend on it.
 - If the harness has a native goal mechanism, feed it: "all ledger items pass or blocked, or stop after N hours".
-- **Stop** when: all items pass; everything remaining hangs on blocked; two dispatch rounds move nothing (stagnation — never a third identical attempt); or budget runs out. Always end with the final report and a `/handoff`.
+- **Stop** when: all items pass; everything remaining hangs on blocked; two dispatch rounds, tactical retries included, move nothing (stagnation — never a third identical attempt); or budget runs out. Always end with the final report and a `/handoff`.
 
 ## Gate 2 — Review
 
