@@ -56,7 +56,7 @@ metadata:
 
 ## Report —— 固定模板，只刷新数据
 
-从 `assets/report-template.html` 开始，不要自己设计。开工时把它复制进工作区作为 `report.html`，用 session 语言把 `lh-labels` 块写一次（键不变，只翻译值），再用状态文件填好 `lh-data` 块。此后每次刷新只重写 `lh-data`，别的都不动：运行期间不改标记、样式和脚本。数据结构、模板自己计算的内容、刷新脚本见 `references/report.md`。看板缺什么，用 `custom_panels` 补；模板本身的改进回到 skill 里做。
+从 `assets/report-template.html` 开始，不要自己设计。开工时把它复制进工作区作为 `report.html`，用 session 语言把 `lh-labels` 块写一次（键不变，只翻译值），再用状态文件填好 `lh-data` 块；然后对它跑 `scripts/check-report.py`，被点名的文案改短。此后每次刷新只重写 `lh-data`，别的都不动：运行期间不改标记、样式和脚本。数据结构、模板自己计算的内容、刷新脚本见 `references/report.md`。看板缺什么，用 `custom_panels` 补；模板本身的改进回到 skill 里做。
 
 模板已经满足下面的契约，保持如此：
 
