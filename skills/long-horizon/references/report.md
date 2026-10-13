@@ -10,7 +10,7 @@
 | `<script id="lh-labels">` | the orchestrator | once, at admission |
 | `<script id="lh-data">` | the orchestrator | on every flip and at the end of a session |
 
-- **At admission**: copy the template to `.long-horizon/<goal-slug>/report.html`. If the session's language differs from the template's, rewrite `lh-labels` once: keep every key, translate the values, set `lang`. Then replace the example `lh-data` with the real goal.
+- **At admission**: copy the template to `.long-horizon/<goal-slug>/report.html`. If the session's language differs from the template's, rewrite `lh-labels` once: keep every key, translate the values, set `lang`. Keep `status.*`, `cut`, `human` and `new` short (about 4 CJK characters or 10 Latin letters): they sit inside fixed-size graph nodes, and anything longer is cut with an ellipsis. Then replace the example `lh-data` with the real goal.
 - **On every refresh**: rewrite `lh-data` and nothing else. No edits to markup, CSS, script or icons inside a run. If the board lacks something, use `custom_panels`; improvements to the template go back to the skill.
 - **One way only**: everything in `lh-data` must already exist in the state files (`goal.md`, `ledger.json`, `log.md`, `next.md`, `events.jsonl`). The report is a view, never a store.
 
@@ -52,7 +52,7 @@ PY
 - `ledger` rows mirror `ledger.json`; the optional fields live there too, so the report stays a view.
 - `status` is only for states `passes` cannot express. Leave it out for items that are simply waiting.
 - `question` marks an item as needing the human; it shows in the "needs you" inbox.
-- `human: true` marks a manual step (for example "merge PR #241").
+- `human: true` marks a manual step (for example "merge PR #241"). It counts as "needs you" once all its deps have passed; until then it is simply waiting.
 
 ## What the template computes (never store these)
 
