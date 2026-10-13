@@ -10,7 +10,7 @@
 | `<script id="lh-labels">` | the orchestrator | once, at admission |
 | `<script id="lh-data">` | the orchestrator | on every flip and at the end of a session |
 
-- **At admission**: copy the template to `.long-horizon/<goal-slug>/report.html`. If the session's language differs from the template's, rewrite `lh-labels` once: keep every key, translate the values, set `lang`. Then replace the example `lh-data` with the real goal.
+- **At admission**: copy the template to `.long-horizon/<goal-slug>/report.html`. If the session's language differs from the template's, rewrite `lh-labels` once: keep every key, translate the values, set `lang`. Keep `status.*` short (about 6 CJK characters or 16 Latin letters): it sits inside fixed-size graph nodes. Then replace the example `lh-data` with the real goal, and check the layout (below).
 - **On every refresh**: rewrite `lh-data` and nothing else. No edits to markup, CSS, script or icons inside a run. If the board lacks something, use `custom_panels`; improvements to the template go back to the skill.
 - **One way only**: everything in `lh-data` must already exist in the state files (`goal.md`, `ledger.json`, `log.md`, `next.md`, `events.jsonl`). The report is a view, never a store.
 
@@ -52,12 +52,21 @@ PY
 - `ledger` rows mirror `ledger.json`; the optional fields live there too, so the report stays a view.
 - `status` is only for states `passes` cannot express. Leave it out for items that are simply waiting.
 - `question` marks an item as needing the human; it shows in the "needs you" inbox.
-- `human: true` marks a manual step (for example "merge PR #241").
+- `human: true` marks a manual step (for example "merge PR #241"). It counts as "needs you" once all its deps have passed; until then it is simply waiting.
 
 ## What the template computes (never store these)
 
 Ready items (all deps passed), the critical path (longest unfinished chain, weighted by `est`, default 1), bottlenecks (unfinished items holding back the most unfinished descendants), counts, Done-when progress, and the horizon strip.
 
+## Checking the layout
+
+`scripts/check-report.py` opens a report in headless Chrome at 375px and 1440px, walks every tab and every item's drawer, and lists each label that is cut, row that wraps, box that spills over, and page that scrolls sideways. It needs only Chrome or Chromium (set `CHROME` if it is not found).
+
+- **At admission**, after writing `lh-labels`: `python3 -I scripts/check-report.py .long-horizon/<goal-slug>/report.html`. Shorten whatever it names.
+- **Before shipping a template change**: `python3 -I scripts/check-report.py --stress`. It fills the template's example with worst-case content (one item with all three tags, a long lane name, ISO times, a long title, wordy English labels) and must pass.
+
+Opening `report.html?lint` in a browser shows the same list at the top of the page.
+
 ## Icons
 
-`groups[].icon` takes one of: `prep`, `visual`, `copy`, `engine`, `usage`, `wrap`. The inbox uses `spec`, `decide`, `act`, `retry`; the brand mark is `horizon`. Icons are hand-drawn masks: the ink follows the text colour and the fill takes the lane or status colour, so both themes work.
+`groups[].icon` takes one of: `prep`, `visual`, `copy`, `engine`, `usage`, `wrap`. The inbox uses `spec`, `decide`, `act`, `retry`; the brand mark is `horizon`. Node tags (bottleneck, manual, discovered) are icons, so they take the same width in every language; their names are in the tooltip, the legend and the drawer. Icons are hand-drawn masks: the ink follows the text colour and the fill takes the lane or status colour, so both themes work.

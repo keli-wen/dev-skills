@@ -56,7 +56,7 @@ Assume any moment may be the last: context death, crash, budget cut. A fresh orc
 
 ## Report — a fixed template, a data-only refresh
 
-Start from `assets/report-template.html`; do not design your own. At admission, copy it into the workspace as `report.html`, write its `lh-labels` block once in the session's language (keep the keys, translate the values), and fill its `lh-data` block from the state files. From then on, every refresh rewrites `lh-data` and nothing else: no markup, style or script edits inside a run. The schema, what the template computes for itself, and a refresh snippet are in `references/report.md`. If the board lacks something, use `custom_panels`; improvements to the template go back to the skill.
+Start from `assets/report-template.html`; do not design your own. At admission, copy it into the workspace as `report.html`, write its `lh-labels` block once in the session's language (keep the keys, translate the values), and fill its `lh-data` block from the state files; then run `scripts/check-report.py` on it and shorten any label it names. From then on, every refresh rewrites `lh-data` and nothing else: no markup, style or script edits inside a run. The schema, what the template computes for itself, and a refresh snippet are in `references/report.md`. If the board lacks something, use `custom_panels`; improvements to the template go back to the skill.
 
 The template already meets the contract; keep it that way:
 

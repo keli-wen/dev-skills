@@ -53,7 +53,7 @@ body { background: var(--bg); color: var(--fg); font: 13.5px/1.55 var(--font-ui)
 .mono { font-family: var(--font-mono); }
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
-.wrap { max-width: 1320px; margin: 0 auto; padding-inline: 24px; padding-block: 24px 56px; display: grid; gap: 18px; }
+.wrap { max-width: 1320px; margin: 0 auto; padding-inline: 24px; padding-block: 24px 56px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
 
 /* Status colours */
 .s-passed { --c: var(--ok); }
@@ -63,8 +63,8 @@ button { font: inherit; color: inherit; }
 .s-ready { --c: var(--fg-2); }
 .s-pending { --c: var(--idle); }
 
-/* Header: brand row + goal row. The bottom edge is the horizon: one tick per item, coloured by status,
-   with a dot marking overall progress. Restraint first: no gradients, no ambient animation. */
+/* Header: brand row + goal row. The bottom edge is the horizon: one segment per item, grouped by status
+   with passed first, so it reads left to right as a progress bar. Restraint first: no gradients, no ambient animation. */
 .hero { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 20px 0; display: grid; gap: 14px; box-shadow: var(--shadow); }
 .brand { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
 .mark { width: 20px; height: 20px; flex: none; color: var(--fg); }
@@ -100,6 +100,10 @@ button { font: inherit; color: inherit; }
 .seg button[aria-pressed="true"] { background: var(--surface); color: var(--fg); box-shadow: var(--shadow); font-weight: 600; }
 
 /* Hand-drawn icons (ink + fill alpha masks): ink follows the text colour, the fill uses --icon-accent */
+/* Badges, pills and chips stay on one line: CJK text may break between any two characters,
+   so a squeezed badge would otherwise stack one character per line */
+.pill, .gchip, .tag, .kind, .cnt, .phase, .legend span, .tabbar button, .seg button { white-space: nowrap; }
+
 .hi { position: relative; display: inline-block; width: var(--sz, 20px); height: var(--sz, 20px); flex: none; vertical-align: middle; }
 .hi::before, .hi::after { content: ""; position: absolute; inset: 0; -webkit-mask-position: center; mask-position: center; -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
 .hi::before { background: var(--icon-accent, var(--brand)); -webkit-mask-image: var(--fill); mask-image: var(--fill); }
@@ -111,14 +115,14 @@ button { font: inherit; color: inherit; }
 .inbox-head h2 { margin: 0; font-size: 13.5px; font-weight: 650; }
 .inbox-head .n { font-size: 11.5px; font-weight: 650; color: var(--wait); background: color-mix(in srgb, var(--wait) 12%, transparent); border-radius: 99px; padding: 0 8px; line-height: 19px; }
 .inbox-head .hint { font-size: 12px; color: var(--fg-3); margin-left: auto; }
-.inbox-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 2px 8px; }
+.inbox-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(440px, 100%), 1fr)); gap: 2px 8px; }
 .ask { display: grid; grid-template-columns: 38px minmax(0, 1fr) 16px; gap: 12px; align-items: start; text-align: left; border: 0; background: transparent; border-radius: 10px; padding: 10px 10px 11px; cursor: pointer; transition: background .15s; }
 .ask:hover { background: var(--surface-2); }
 .ask .tile { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; color: var(--k); background: color-mix(in srgb, var(--k) 10%, transparent); --icon-accent: var(--k); }
 .ask .tile .hi { color: var(--fg); }
 .ask .tile svg { width: 19px; height: 19px; }
 .ask .body { display: grid; gap: 2px; min-width: 0; }
-.ask .t { display: flex; gap: 10px; align-items: baseline; min-width: 0; }
+.ask .t { display: flex; flex-wrap: wrap; gap: 0 10px; align-items: baseline; min-width: 0; }
 .ask .q { font-weight: 600; font-size: 13.5px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ask .meta { font-size: 11.5px; color: var(--fg-3); white-space: nowrap; margin-left: auto; font-variant-numeric: tabular-nums; }
 .ask .meta .mono { color: var(--fg-2); }
@@ -141,6 +145,7 @@ button { font: inherit; color: inherit; }
 .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--fg-3); }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
 .legend i { width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.legend .tag { height: 15px; min-width: 15px; }
 .legend .crit-key { width: 16px; height: 0; border-top: 2px solid var(--brand); border-radius: 0; background: none; }
 .graph-scroll { overflow-x: auto; overflow-y: hidden; padding: 6px 0 10px; scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--fg-3) 30%, transparent) transparent; }
 .graph-scroll::-webkit-scrollbar { height: 6px; }
@@ -152,12 +157,13 @@ button { font: inherit; color: inherit; }
 .graph svg.edges { position: absolute; inset: 0; overflow: visible; pointer-events: none; }
 .lane { position: absolute; left: 0; right: 0; border-top: 1px solid var(--line); background: color-mix(in srgb, var(--lc) 3%, transparent); }
 .lane::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--lc); opacity: .75; }
-.lane-label { position: absolute; left: 14px; top: 11px; display: grid; gap: 1px; width: 92px; }
+.lane-label { position: absolute; left: 14px; top: 11px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1px; width: 92px; }
 .lane-label b { font-size: 12px; font-weight: 600; color: var(--fg); display: flex; align-items: center; gap: 4px; margin-left: -4px; }
+.lane-label .nm { min-width: 0; overflow-wrap: anywhere; hyphens: auto; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .lane-label b::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--lc); }
 .lane-label b.has-ic::before { display: none; }
 .lane-label .hi { --icon-accent: var(--lc); }
-.lane-label span { font-size: 10.5px; color: var(--fg-3); line-height: 1.35; }
+.lane-label > span { font-size: 10.5px; color: var(--fg-3); line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .edge { fill: none; stroke: var(--edge); stroke-width: 1.3; }
 .edge.done { stroke: color-mix(in srgb, var(--ok) 55%, var(--edge)); }
 .edge.flow { stroke: color-mix(in srgb, var(--run) 70%, var(--edge)); stroke-width: 1.6; stroke-dasharray: 4 6; animation: flow 1.4s linear infinite; }
@@ -167,25 +173,31 @@ button { font: inherit; color: inherit; }
 @keyframes flow { to { stroke-dashoffset: -20; } }
 .graph.focus .edge:not(.hl) { opacity: .12; }
 .graph.focus .node:not(.hl) { opacity: .28; filter: saturate(.4); }
-.node { position: absolute; width: 164px; height: 64px; border-radius: 10px; text-align: left; padding: 7px 10px; display: grid; align-content: start; gap: 2px; line-height: 1.3; cursor: pointer; border: 1px solid var(--line); border-top: 2px solid var(--c); background: var(--surface); box-shadow: var(--shadow); transition: opacity .2s, filter .2s, border-color .2s; }
+.node { position: absolute; width: 164px; height: 64px; border-radius: 10px; text-align: left; padding: 7px 10px; display: grid; align-content: start; gap: 2px; line-height: 1.3; cursor: pointer; border: 1px solid var(--line); border-top: 2px solid var(--c); background: var(--surface); box-shadow: var(--shadow); overflow: hidden; transition: opacity .2s, filter .2s, border-color .2s; }
 .node:hover { border-color: var(--c); z-index: 3; }
 .node.s-pending { border-top-style: dashed; color: var(--fg-2); }
 
 .node.s-blocked, .node.s-failed { background: color-mix(in srgb, var(--c) 5%, var(--surface)); border-color: color-mix(in srgb, var(--c) 35%, var(--line)); }
 .node.crit { box-shadow: var(--shadow), 0 0 0 1px color-mix(in srgb, var(--brand) 50%, transparent); }
 .node.sel { outline: 2px solid var(--fg); outline-offset: 2px; }
-.node .r1 { display: flex; align-items: center; gap: 5px; font-size: 10.5px; min-width: 0; }
-.node .r1 .id { font-family: var(--font-mono); font-weight: 600; color: var(--fg-2); }
-.node .r1 .stt { color: var(--c); font-weight: 600; }
-.node .r1 .tags { margin-left: auto; display: flex; gap: 4px; }
+.node .r1 { display: flex; align-items: center; gap: 5px; font-size: 10.5px; min-width: 0; white-space: nowrap; }
+.node .r1 .id { flex: none; font-family: var(--font-mono); font-weight: 600; color: var(--fg-2); }
+.node .r1 .stt { min-width: 0; overflow: hidden; text-overflow: ellipsis; color: var(--c); font-weight: 600; }
 .node .ttl { font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.node .meta { font-size: 10.5px; color: var(--fg-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.node .meta { display: flex; align-items: center; gap: 4px; min-width: 0; font-size: 10.5px; color: var(--fg-3); white-space: nowrap; overflow: hidden; }
+.node .meta .txt { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .ic { width: 12px; height: 12px; flex: none; border-radius: 50%; display: grid; place-items: center; color: var(--surface); background: var(--c); font-size: 8px; font-weight: 800; }
 .s-pending .ic { background: transparent; border: 1.5px dashed var(--c); }
 .s-ready .ic { background: transparent; border: 1.5px solid var(--c); }
 .s-in-flight .ic { background: transparent; border: 2px solid color-mix(in srgb, var(--c) 30%, transparent); border-top-color: var(--c); animation: spin .9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.tag { font-size: 10px; font-weight: 600; padding: 0 5px; border-radius: 4px; line-height: 16px; }
+/* Tags: an icon chip on graph nodes (same width in every language; the name is in the tooltip, legend and drawer),
+   icon plus name in the drawer */
+.tag { flex: none; display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 16px; min-width: 16px; padding: 0 2px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+.tag svg { width: 11px; height: 11px; flex: none; stroke-width: 2.6; }
+.dh .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.dh .tag { height: 22px; padding: 0 8px 0 6px; border-radius: 7px; }
+.dh .tag svg { width: 13px; height: 13px; stroke-width: 2.2; }
 .tag.cut { background: color-mix(in srgb, var(--wait) 22%, transparent); color: var(--wait); }
 .tag.human { background: color-mix(in srgb, var(--brand) 18%, transparent); color: var(--brand); }
 .tag.new { background: color-mix(in srgb, var(--bad) 16%, transparent); color: var(--bad); }
@@ -231,7 +243,7 @@ button { font: inherit; color: inherit; }
 .dw .chk { font-family: var(--font-mono); font-size: 11.5px; color: var(--fg-3); }
 .bar { width: 120px; height: 7px; border-radius: 99px; background: var(--surface-2); overflow: hidden; margin-top: 7px; }
 .bar span { display: block; height: 100%; background: var(--ok); border-radius: 99px; }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 14px; }
 .box { border-radius: 14px; padding: 12px 14px; background: color-mix(in srgb, var(--bc) 8%, var(--surface)); border: 1px solid color-mix(in srgb, var(--bc) 25%, var(--line)); }
 .box h4 { margin: 0 0 6px; font-size: 12.5px; color: var(--bc); }
 .box ul { margin: 0; padding-left: 18px; font-size: 13px; color: var(--fg-2); display: grid; gap: 4px; }
@@ -246,7 +258,7 @@ td { padding: 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
 tbody tr { cursor: pointer; transition: background .12s; }
 tbody tr:hover { background: var(--surface-2); }
 .raw { max-height: 360px; overflow: auto; background: var(--surface-2); border-radius: 12px; padding: 12px; font: 11.5px/1.5 var(--font-mono); white-space: pre; margin: 10px 0 0; }
-@media (max-width: 640px) { .tl li { grid-template-columns: minmax(0, 1fr); gap: 0; } .tools { margin-left: 0; } }
+@media (max-width: 640px) { .wrap { padding-inline: 16px; } .tl li { grid-template-columns: minmax(0, 1fr); gap: 0; } .tools { margin-left: 0; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
 </head>
@@ -571,6 +583,11 @@ tbody tr:hover { background: var(--surface-2); }
     decide: SVG('<circle cx="12" cy="12" r="9"/><path d="M9.3 9.2a2.8 2.8 0 0 1 5.4 1c0 1.9-2.7 2.3-2.7 4.1"/><circle cx="12" cy="17.6" r="1.1" fill="currentColor" stroke="none"/>'),
     chevron: SVG('<path d="m9.5 6 6 6-6 6"/>')
   }
+  const TAG_ICONS = {
+    cut: SVG('<path d="M4 5h16l-6 7.5V19l-4 1.5v-8z"/>'),
+    human: SVG('<circle cx="12" cy="7.5" r="3.5"/><path d="M5 20.5c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/>'),
+    new: SVG('<path d="M12 3.5l2 6.5 6.5 2-6.5 2-2 6.5-2-6.5-6.5-2 6.5-2z" fill="currentColor"/>')
+  }
   // Hand-drawn icons (lh-icons block, ink + fill masks): each registers its CSS variables once
   const IMG = read("lh-icons") || {}
   {
@@ -581,11 +598,15 @@ tbody tr:hover { background: var(--surface-2); }
   const icon = (k, size) => IMG[k] ? `<span class="hi hi-${k}" style="--sz:${size || 20}px" aria-hidden="true"></span>` : (FALLBACK_ICONS[k] || FALLBACK_ICONS.decide)
   const ICON = { "passed": "✓", "blocked": "!", "failed": "✕", "in-flight": "", "ready": "", "pending": "" }
   const ORDER = ["blocked", "failed", "in-flight", "ready", "pending", "passed"]
+  // Legend, counts and the horizon strip read in this order: done first, untouched last
+  const LEGEND = ["passed", "in-flight", "blocked", "failed", "ready", "pending"]
   const PHASE_COLOR = { draft: "var(--fg-3)", running: "var(--run)", review: "var(--wait)", stopped: "var(--ok)" }
   const LOG_COLOR = { dispatch: "var(--run)", verify: "var(--ok)", fail: "var(--bad)", blocked: "var(--wait)", session: "var(--brand)", spec: "var(--fg-3)" }
   const FALLBACK_HUES = ["#8b7fd1", "#c66f99", "#3a9a8d", "#6383cf", "#cf8a46", "#9b968c"]
   const ST = (s) => t(`status.${s}`)
 
+  // Agents often write ISO timestamps; show them as "YYYY-MM-DD HH:MM" in the writer's wall time
+  const when = (s) => String(s ?? "").replace(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:?\d{2})?$/, "$1 $2")
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c])
   const store = { get(k) { try { return localStorage.getItem(k) } catch { return null } }, set(k, v) { try { localStorage.setItem(k, v) } catch {} } }
   const DATA = read("lh-data")
@@ -597,7 +618,8 @@ tbody tr:hover { background: var(--surface-2); }
   function model(d) {
     const items = (d.ledger || []).map((it) => ({ ...it, st: it.passes ? "passed" : ["in-flight", "blocked", "failed"].includes(it.status) ? it.status : it.question ? "blocked" : "pending" }))
     const get = new Map(items.map((it) => [it.id, it]))
-    for (const it of items) if (it.st === "pending" && (it.deps || []).every((x) => get.get(x)?.st === "passed")) it.st = "ready"
+    // A manual step whose deps have all passed waits on the human, so it needs you; before that it only waits
+    for (const it of items) if (it.st === "pending" && (it.deps || []).every((x) => get.get(x)?.st === "passed")) it.st = it.human ? "blocked" : "ready"
     const order = [], mark = new Map()
     const visit = (id) => { if (mark.get(id) || !get.has(id)) return; mark.set(id, 1); for (const dep of get.get(id).deps || []) visit(dep); order.push(id) }
     items.forEach((it) => visit(it.id))
@@ -632,13 +654,15 @@ tbody tr:hover { background: var(--surface-2); }
     return { d, items, get, order, level, children, down, up, crit, critSet: new Set(crit), blocking, cuts, counts, groups, gOf }
   }
 
+  const tagsOf = (m, it) => ["cut", "human", "new"].filter((k) => (k === "cut" ? m.cuts.has(it.id) : k === "human" ? it.human : it["discovered-from"]))
+  const tagChip = (k) => `<span class="tag ${k}" role="img" aria-label="${esc(t(k))}" title="${esc(t(k))}">${TAG_ICONS[k]}</span>`
+
   function header(m) {
     const g = m.d.goal || {}, total = m.items.length, done = m.counts.passed
     const R = 24, C = 2 * Math.PI * R, pct = total ? done / total : 0
-    const human = m.items.filter((it) => it.human && it.st !== "passed" && it.st !== "blocked").length
     const cnt = (st, n, label) => n ? `<button type="button" class="cnt s-${st}" data-jump="${st}"><b>${n}</b><span>${esc(label)}</span></button>` : ""
-    // Horizon: one tick per item in dependency order; the dot marks overall progress
-    const seq = m.order.map((id) => m.get.get(id))
+    // Horizon: one tick per item, grouped by status (dependency order within a status), so grey only ever trails
+    const seq = m.order.map((id) => m.get.get(id)).sort((a, b) => LEGEND.indexOf(a.st) - LEGEND.indexOf(b.st))
     const gap = 0.6, segW = seq.length ? (100 - gap * (seq.length + 1)) / seq.length : 0
     const ticks = seq.map((it, i) => {
       const tall = it.st === "in-flight" || it.st === "blocked" || it.st === "failed"
@@ -662,10 +686,10 @@ tbody tr:hover { background: var(--surface-2); }
           </div>
           <div class="title">
             <h1>${esc(g.title)}</h1>
-            <div class="sub"><span class="phase ${esc(g.phase)}" style="--pc:${PHASE_COLOR[g.phase] || "var(--fg-3)"}"><i></i>${esc(t(`phase.${g.phase}`))}</span><span class="mono">${esc(g.slug)}</span>${g.repo ? `<span>${esc(g.repo)}${g.base ? ` → ${esc(g.base)}` : ""}</span>` : ""}<span>${esc(t("sessions", { n: g.sessions ?? 0 }))}</span><span>${esc(t("updated", { t: g.updated || "" }))}</span></div>
+            <div class="sub"><span class="phase ${esc(g.phase)}" style="--pc:${PHASE_COLOR[g.phase] || "var(--fg-3)"}"><i></i>${esc(t(`phase.${g.phase}`))}</span><span class="mono">${esc(g.slug)}</span>${g.repo ? `<span>${esc(g.repo)}${g.base ? ` → ${esc(g.base)}` : ""}</span>` : ""}<span>${esc(t("sessions", { n: g.sessions ?? 0 }))}</span><span>${esc(t("updated", { t: when(g.updated) }))}</span></div>
           </div>
           <div class="counts">
-            ${cnt("passed", done, t("count_passed", { total }))}${cnt("in-flight", m.counts["in-flight"], ST("in-flight"))}${cnt("blocked", m.counts.blocked + human + (m.d.open_questions || []).length, ST("blocked"))}${cnt("failed", m.counts.failed, ST("failed"))}${cnt("ready", m.counts.ready, ST("ready"))}
+            ${cnt("passed", done, t("count_passed", { total }))}${cnt("in-flight", m.counts["in-flight"], ST("in-flight"))}${cnt("blocked", m.counts.blocked + (m.d.open_questions || []).length, ST("blocked"))}${cnt("failed", m.counts.failed, ST("failed"))}${cnt("ready", m.counts.ready, ST("ready"))}
           </div>
         </div>
         <div class="horizon" aria-hidden="true">
@@ -690,8 +714,8 @@ tbody tr:hover { background: var(--surface-2); }
     }
     const asked = new Set((m.d.open_questions || []).flatMap((q) => q.blocks || []))
     for (const it of m.items) {
-      const human = it.human && it.st !== "passed" && it.st !== "blocked" && it.st !== "failed"
-      if (!(it.st === "blocked" || it.st === "failed" || (human && !asked.has(it.id)))) continue
+      if (it.st !== "blocked" && it.st !== "failed") continue
+      if (it.human && !it.question && asked.has(it.id)) continue // the open question's row already covers it
       const n = m.blocking.get(it.id) || 0
       const kind = it.st === "failed" ? "retry" : it.human ? "act" : "decide"
       rows.push(row(kind, kind, it.title, `${esc(t(`kind.${kind}`))} · <span class="mono">${esc(it.id)}</span>${n ? ` · ${esc(t("blocks_n", { n }))}` : ""}`, esc(it.question || (it.evidence || []).slice(-1)[0] || it.desc), it.id))
@@ -740,16 +764,16 @@ tbody tr:hover { background: var(--surface-2); }
       const c = Math.max(36, (x2 - x1) * 0.5)
       edges += `<path class="edge ${cls}" data-a="${esc(dep)}" data-b="${esc(it.id)}" d="M${x1} ${y1} C${x1 + c} ${y1}, ${x2 - c} ${y2}, ${x2} ${y2}"/>`
     }
-    const laneEls = used.map((l) => `<div class="lane" style="top:${l.top}px;height:${l.height}px;--lc:${esc(l.g.color)}"><div class="lane-label"><b class="${IMG[l.g.icon] ? "has-ic" : ""}">${IMG[l.g.icon] ? icon(l.g.icon, 24) : ""}${esc(l.g.label)}</b>${l.g.hint ? `<span>${esc(l.g.hint)}</span>` : ""}</div></div>`).join("")
+    const laneEls = used.map((l) => `<div class="lane" style="top:${l.top}px;height:${l.height}px;--lc:${esc(l.g.color)}"><div class="lane-label"><b class="${IMG[l.g.icon] ? "has-ic" : ""}">${IMG[l.g.icon] ? icon(l.g.icon, 24) : ""}<span class="nm">${esc(l.g.label)}</span></b>${l.g.hint ? `<span>${esc(l.g.hint)}</span>` : ""}</div></div>`).join("")
     const nodes = m.items.map((it) => {
       const p = pos.get(it.id)
       if (!p) return ""
-      const tags = [m.cuts.has(it.id) ? `<span class="tag cut">${esc(t("cut"))}</span>` : "", it.human ? `<span class="tag human">${esc(t("human"))}</span>` : "", it["discovered-from"] ? `<span class="tag new">${esc(t("new"))}</span>` : ""].join("")
+      const tags = tagsOf(m, it).map(tagChip).join("")
       const meta = [it.issue ? `#${it.issue}` : "", it.pr ? `PR #${it.pr}` : "", it.attempts > 1 ? t("attempt_n", { n: it.attempts }) : "", (it.evidence || []).length ? t("evidence_n", { n: it.evidence.length }) : ""].filter(Boolean).join(" · ")
       return `<button type="button" class="node s-${it.st} ${m.critSet.has(it.id) ? "crit" : ""} ${selected === it.id ? "sel" : ""}" data-id="${esc(it.id)}" style="left:${p.x}px;top:${p.y}px">
-        <span class="r1"><span class="ic">${ICON[it.st]}</span><span class="id">${esc(it.id)}</span><span class="stt">${esc(ST(it.st))}</span><span class="tags">${tags}</span></span>
+        <span class="r1"><span class="ic">${ICON[it.st]}</span><span class="id">${esc(it.id)}</span><span class="stt">${esc(ST(it.st))}</span></span>
         <span class="ttl">${esc(it.title || it.desc)}</span>
-        <span class="meta">${esc(meta || it.desc)}</span>
+        <span class="meta">${tags}<span class="txt">${esc(meta || it.desc)}</span></span>
       </button>`
     }).join("")
     const critTxt = m.crit.length
@@ -758,7 +782,7 @@ tbody tr:hover { background: var(--surface-2); }
     return `
       <section class="board" aria-label="${esc(t("graph_title"))}">
         <div class="board-head"><div><h2>${esc(t("graph_title"))}</h2><span class="hint">${esc(t("graph_hint"))}</span></div>
-          <div class="legend">${["passed", "in-flight", "blocked", "failed", "ready", "pending"].map((s) => `<span class="s-${s}"><i></i>${esc(ST(s))}</span>`).join("")}<span><i class="crit-key"></i>${esc(t("crit"))}</span></div>
+          <div class="legend">${LEGEND.map((s) => `<span class="s-${s}"><i></i>${esc(ST(s))}</span>`).join("")}<span><i class="crit-key"></i>${esc(t("crit"))}</span>${["cut", "human", "new"].filter((k) => m.items.some((it) => tagsOf(m, it).includes(k))).map((k) => `<span>${tagChip(k)}${esc(t(k))}</span>`).join("")}</div>
         </div>
         <div class="graph-scroll"><div class="graph-fit" data-w="${width}" data-h="${height}"><div class="graph" id="graph" style="width:${width}px;height:${height}px">
           ${laneEls}
@@ -788,8 +812,8 @@ tbody tr:hover { background: var(--surface-2); }
         ${box(t("spec.verify"), "var(--run)", [`${t("spec.orchestrator")}: ${d.verification?.orchestrator || ""}`, `${t("spec.verifier")}: ${d.verification?.verifier || ""}`])}
       </div>`
     } else if (tab === "activity") {
-      const dec = (d.decisions || []).slice().reverse().map((x) => `<li><span class="when">${esc(x.when)}</span><span>${esc(x.text)}</span></li>`).join("")
-      const log = (d.log || []).map((x) => `<li><span class="when">${esc(x.when)}</span><span><span class="kind" style="--c:${LOG_COLOR[x.kind] || "var(--fg-3)"}">${esc(t(`log_kind.${x.kind}`))}</span>${esc(x.text)}</span></li>`).join("")
+      const dec = (d.decisions || []).slice().reverse().map((x) => `<li><span class="when">${esc(when(x.when))}</span><span>${esc(x.text)}</span></li>`).join("")
+      const log = (d.log || []).map((x) => `<li><span class="when">${esc(when(x.when))}</span><span><span class="kind" style="--c:${LOG_COLOR[x.kind] || "var(--fg-3)"}">${esc(t(`log_kind.${x.kind}`))}</span>${esc(x.text)}</span></li>`).join("")
       const custom = (d.custom_panels || []).map((p) => `<div class="box" style="--bc:var(--brand)"><h4>${esc(p.title)}</h4>${p.kind === "kv" ? `<ul>${(p.items || []).map(([k, v]) => `<li><b class="mono">${esc(k)}</b>　${esc(v)}</li>`).join("")}</ul>` : p.kind === "list" ? `<ul>${(p.items || []).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<div>${esc(p.text)}</div>`}</div>`).join("")
       const none = `<li class="empty">${esc(t("none"))}</li>`
       body = `<div class="grid2"><div><h4 style="margin:0 0 10px;font-size:12.5px;color:var(--fg-3)">${esc(t("decisions"))}</h4><ul class="tl">${dec || none}</ul></div><div><h4 style="margin:0 0 10px;font-size:12.5px;color:var(--fg-3)">${esc(t("recent"))}</h4><ul class="tl">${log || none}</ul></div>${custom}</div>`
@@ -818,6 +842,7 @@ tbody tr:hover { background: var(--surface-2); }
         <div class="row"><span class="pill">${esc(ST(it.st))}</span><span class="mono" style="color:var(--fg-3)">${esc(it.id)}</span><span class="gchip" style="--lc:${esc(g.color)}">${esc(g.label)}</span><button type="button" class="x" data-close aria-label="${esc(t("drawer.close"))}">×</button></div>
         <h3>${esc(it.title)}</h3>
         <div style="color:var(--fg-2);font-size:13px">${esc(it.desc)}</div>
+        ${tagsOf(m, it).length ? `<div class="tags">${tagsOf(m, it).map((k) => `<span class="tag ${k}">${TAG_ICONS[k]}${esc(t(k))}</span>`).join("")}</div>` : ""}
       </div>
       <div class="db">
         ${it.question ? `<div class="blk"><div class="lbl">${esc(t("drawer.decide"))}</div><div class="askbox">${esc(it.question)}</div></div>` : ""}
@@ -889,13 +914,54 @@ tbody tr:hover { background: var(--surface-2); }
     const el = e.target
     const th = el.closest("[data-theme-set]"); if (th) { setTheme(th.dataset.themeSet); return }
     const tb = el.closest("[data-tab]"); if (tb) { tab = tb.dataset.tab; store.set("lh.tab", tab); renderTabs(); return }
-    const jump = el.closest("[data-jump]"); if (jump) { const first = current.items.find((it) => it.st === jump.dataset.jump); if (first) select(first.id); return }
+    const jump = el.closest("[data-jump]"); if (jump) { const first = current.items.find((it) => it.st === jump.dataset.jump)?.id ?? (jump.dataset.jump === "blocked" ? current.d.open_questions?.[0]?.blocks?.[0] : null); if (first) select(first); return }
     const op = el.closest("[data-open]"); if (op) { select(op.dataset.open); return }
     const node = el.closest(".node"); if (node) { select(node.dataset.id); return }
     if (el.closest("[data-close]") || el.id === "scrim") select(null)
   })
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && selected) select(null) })
   mount()
+
+  // ?lint: list what does not fit, for scripts/check-report.py and for a person checking labels by eye.
+  // Walks every tab and every item's drawer: labels that must show in full, rows that must stay on one line,
+  // boxes that must hold their content, and a page that must not scroll sideways.
+  function lint() {
+    const found = []
+    const add = (kind, where) => { if (!found.some((f) => f.kind === kind && f.where === where)) found.push({ kind, where }) }
+    const cut = (el) => el.scrollWidth > el.clientWidth + 1
+    // Wrapped: two text fragments that do not share a line
+    const wrapped = (el) => {
+      const rs = [], walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT)
+      for (let n; (n = walk.nextNode());) if (n.textContent.trim()) { const r = document.createRange(); r.selectNodeContents(n); rs.push(...[...r.getClientRects()].filter((x) => x.width)) }
+      return rs.some((a) => rs.some((b) => b.top >= a.bottom - 1))
+    }
+    const label = (el) => `${el.closest("[data-id]")?.dataset.id || ""} "${el.textContent.trim()}"`.trim()
+    const check = () => {
+      document.querySelectorAll(".node .stt").forEach((el) => cut(el) && add("label cut", label(el)))
+      document.querySelectorAll(".node .r1, .node .ttl, .node .meta, .pill, .gchip, .tag, .kind, .cnt, .phase, .legend span, .tabbar button").forEach((el) => wrapped(el) && add("wrapped", label(el)))
+      document.querySelectorAll(".node").forEach((n) => {
+        const box = n.getBoundingClientRect()
+        if (cut(n.querySelector(".meta")) || [...n.querySelectorAll("*")].some((c) => { const r = c.getBoundingClientRect(); return r.bottom > box.bottom + 0.5 || r.right > box.right + 0.5 })) add("node overflow", n.dataset.id)
+      })
+      document.querySelectorAll(".lane").forEach((lane) => {
+        const lb = lane.querySelector(".lane-label")
+        if (cut(lb) || cut(lb.querySelector("b")) || lb.getBoundingClientRect().bottom > lane.getBoundingClientRect().bottom + 0.5) add("lane label overflow", lb.querySelector("b").textContent.trim())
+      })
+      document.querySelectorAll(".ask .t").forEach((el) => cut(el) && add("inbox row overflow", el.textContent.trim()))
+      if (document.documentElement.scrollWidth > innerWidth + 1) add("page scrolls sideways", `${tab} tab: ${document.documentElement.scrollWidth}px in a ${innerWidth}px window`)
+    }
+    // Every tab, since only the open one is in the DOM
+    const was = tab
+    for (const k of ["done", "spec", "activity", "list", "data"]) { tab = k; renderTabs(); check() }
+    tab = was; renderTabs()
+    for (const it of current.items) { select(it.id); document.querySelectorAll("#drawer .row, #drawer .tags").forEach((el) => cut(el) && add("drawer row overflow", it.id)) }
+    select(null)
+    const pre = document.createElement("pre")
+    pre.id = "lh-lint"; pre.className = "raw"
+    pre.textContent = JSON.stringify({ width: innerWidth, problems: found }, null, 2)
+    document.getElementById("app").prepend(pre)
+  }
+  if (current && /[?&]lint\b/.test(location.search)) lint()
 })()
 </script>
 
