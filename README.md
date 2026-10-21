@@ -1,38 +1,40 @@
 <p align="center">
-  <img src="./assets/logo.svg" width="140" alt="devai">
+  <img src="./assets/logo.svg" width="140" alt="Rondo">
 </p>
 
-# Dev Agent Skills
+# Rondo
 
 [中文版 README](./README.zh-CN.md)
 
-A set of dev skills I use day to day in agentic engineering, focused on multi-agent-driven work modes and long-horizon autonomous tasks.
+*In a rondo, the theme returns after every episode — never quite the same.*
+
+Agent skills for long-horizon work: turn goals into verified results, and lessons into better runs.
 
 ![Skills overview](./assets/overview.svg)
 
 ## Install
 
 ```bash
-npx skills@latest add keli-wen/dev-skills
+npx skills@latest add keli-wen/rondo
 ```
 
-That installs ordinary, unnamespaced skills. The same set is also available as a plugin, where the skills are namespaced under `devai`, so `handoff` becomes `devai:handoff`.
+That installs ordinary, unnamespaced skills. The same set is also available as a plugin, where the skills are namespaced under `rondo`, so `/long-horizon` becomes `/rondo:long-horizon` and `/handoff` becomes `/rondo:handoff`.
 
 Codex:
 
 ```bash
-codex plugin marketplace add keli-wen/dev-skills
-codex plugin add devai@dev-skills
+codex plugin marketplace add keli-wen/rondo
+codex plugin add rondo@rondo
 ```
 
 Claude Code:
 
 ```bash
-claude plugin marketplace add keli-wen/dev-skills
-claude plugin install devai@dev-skills
+claude plugin marketplace add keli-wen/rondo
+claude plugin install rondo@rondo
 ```
 
-See [the installation guide](./INSTALL.md) for global and project installs and namespace behavior.
+See [the installation guide](./INSTALL.md) for global and project installs, namespace behavior, and migrating from `devai@dev-skills`.
 
 ## Skills
 
@@ -52,26 +54,37 @@ See [the installation guide](./INSTALL.md) for global and project installs and n
 
 ### long-horizon: don't run long for the sake of running long
 
-The obvious way to set up a long agent run is to break a goal into a few sub-goals, hand over a sufficiently detailed instruction document, and let it loose. It looks thorough. But this easily becomes long-horizon for its own sake: plenty of tokens burned, nothing reliably delivered.
+The obvious way to set up a long agent run is to break a goal into a few sub-goals, hand over a long instruction document, and let it loose. It looks thorough. In practice it easily becomes long-horizon for its own sake: plenty of tokens burned, nothing reliably delivered.
 
 The entire skill is designed around one question: **how do you make a long run valuable, not merely long?**
 
-- **Before the run**: you and the agent iterate on the spec until every acceptance criterion names a runnable check. A goal that cannot explain how completion will be verified does not enter the run. At the same time, you agree on what the agent may and may not do unattended.
-- **During the run**: the agent remains an orchestrator and uses `/fan-out` to dispatch execution to subagents. Nothing counts as done without real evidence such as test output or command results; "I finished it" is not evidence. Newly discovered problems join the queue, while a blocked item records exactly who needs to answer what without stalling independent branches.
-- **Watch at any time**: `.long-horizon/<goal-slug>/report.html` refreshes as the run progresses. It is built from a fixed template that ships with the skill, in the language of your session, and shows the goal and acceptance criteria, every item's status, a dependency graph with the critical path and blocking cut-points, key decisions, open questions, the last update time, and the session count. You should never have to reconstruct the agent's current state from its logs.
-- **After the run**: the same HTML report becomes the final review surface. You define the goal at the beginning and review the result at the end; in between, you can observe without repeatedly taking the task back.
+- **Before the run**: you and the agent iterate on the spec through `/ctx-grill` until every acceptance criterion names a runnable check. A goal that cannot explain how completion will be verified does not enter the run. At the same time, you set the authorization envelope — what the agent may and may not do unattended.
+- **During the run**: the agent stays an orchestrator and uses `/fan-out` to dispatch ledger items to subagents. Nothing flips to passed without real evidence — a mechanical check rerun by the orchestrator or a verdict from a black-box verifier; "I finished it" is not evidence. A failed attempt buys one rewritten contract around the failure evidence, never a verbatim repeat. Newly discovered problems join the ledger, while a blocked item records who needs to answer what without stalling independent branches.
+- **Watch at any time**: `.long-horizon/<goal-slug>/report.html` refreshes on every state change. It is built from a fixed template shipped with the skill, in the language of your session, and computes ready items, the critical path, and blocking bottlenecks directly from the ledger. You see the dependency graph, what needs your input, key decisions, and acceptance progress in one place instead of reconstructing state from logs.
+- **After the run**: the same HTML report becomes the review surface. You define the goal at the beginning and review the result at the end; in between, you can observe without repeatedly taking the task back. On graduation, durable conclusions are distilled through `/to-ctx`, and the workspace is archived rather than deleted.
 
-I deliberately specify a **Contract, not Template**. The contract defines what the report must contain and keeps its data separate from presentation; the agent decides what the page should look like. Hardcoding a visual template would bet against the next model. I would rather constrain what the report must communicate than how it must look.
+![Long Horizon live run board](./assets/long-horizon-board.png)
+
+The board follows one rule: **a fixed template, a data-only refresh**. At admission, the orchestrator copies `assets/report-template.html` into `.long-horizon/<goal-slug>/report.html`, translates the `lh-labels` block once into the session's language, and verifies with `scripts/check-report.py` that every label fits at both 375px and 1440px. From then on, refreshes rewrite only the `lh-data` JSON block — never the markup, styles, or script — and everything shown on the board must already exist in the workspace state files (`goal.md`, `ledger.json`, `log.md`, `next.md`, `events.jsonl`). The report is a view, never a store.
 
 This is the skill I most want to get right, and I am still iterating on it through real work — including one field test that forced a full redesign.
 
+### Returning to the theme: from archived runs to better runs
+
+A rondo returns to its main theme after each episode, and each return carries what happened in between. Rondo is built around both halves of that loop: pushing an episode to verified completion inside a run, and returning to a stronger starting point across runs.
+
+Today, the first half is live and the second half is laying its tracks:
+
+- **What runs today**: `/to-ctx` distills verified findings and decisions from a finished run into your project's durable context documents, and `/ctx-research` and `/ctx-grill` read those documents before the next goal starts. Meanwhile, `/long-horizon` records an append-only trajectory in `.long-horizon/<goal-slug>/` — `events.jsonl` (dispatches, verification verdicts and rejection reasons, tactical retries with rewritten contracts, discovered items, blocks, stops), `log.md` (decisions and dead ends), `ledger.json`, and `goal.md` — and archives the directory on graduation instead of deleting it.
+- **What comes next (TODO — trajectory learning / "dreaming")**: nothing reads `events.jsonl` during a run yet. The next step is an offline consolidation skill that reads archived `.long-horizon/` trajectories between runs — spotting recurring verification rejections, contract rewrites that unblocked a retry, false starts in `log.md`, and where decomposition or verification setup fell short — and turns those lessons into concrete proposals for your project context, skill playbooks, or future admission checks. Human-reviewed, evidence-backed, and grounded in actual run records rather than vague "self-improvement".
+
 ### lowband: let the agent carry the information-processing load
 
-The usual advice is to stop working when you are drained. But in reality the work often has to continue; you simply no longer have the energy to sift through everything the agent gives you and decide what matters.
+The usual advice is to stop working when you are drained. In reality the work often has to continue; you simply no longer have the energy to sift through everything the agent gives you and decide what matters.
 
 lowband applies to the whole collaboration rather than joining a pipeline as another step. Once it is on, the agent digests the information and handles routine choices for you. It brings back only decisions that genuinely need your judgment, formatted as two options with a recommendation; most of the time, you can answer with one letter. Other skills stay unchanged. lowband filters their questions and confirmation requests in one place: the agent decides anything that will not change the task's direction, and asks you about anything that might. See [`skills/lowband/SKILL.md`](./skills/lowband/SKILL.md) for the full rules.
 
-But one thing never changes: **the information-processing load can move toward the agent; authority cannot.** Deleting, publishing, deploying, spending, and sending anything external still require your explicit approval in every mode.
+One thing never changes: **the information-processing load can move toward the agent; authority cannot.** Deleting, publishing, deploying, spending, and sending anything external still require your explicit approval in every mode.
 
 ### readout: the problem is density, not length
 
@@ -87,7 +100,7 @@ One line does not move: **readout governs how things are said, never what may be
 
 ### The rest: composable atoms
 
-The remaining skills are more conventional. I wrote my own versions so they can form a coherent system and evolve together.
+The remaining skills are smaller building blocks written to share the same contracts and compose cleanly.
 
 `just-ask` is the smallest atom. It compresses one prompt you would otherwise retype — "I'm only asking; investigate read-only and answer, don't touch anything" — into a single command, because an agent deep in a working context tends to treat every message as the next task. It is the mirror image of the modes: where lowband and readout stay on until turned off, `/just-ask` covers exactly one turn.
 
@@ -105,7 +118,7 @@ These atoms stay small enough to compose into concrete scenarios with pipes. The
 Dependencies only flow downward, so they cannot form loops; the graph at the top shows the complete structure. `skills/` is the source of truth and the pack the install commands above cover. `skills-zh/` mirrors it in Chinese, under the same skill names, for people who would rather read the rules in their own language; it follows `skills/` rather than being released on its own. The mirror is a straight translation, because the language-specific writing rules live in the English pack too. Writing defects such as verb-into-noun conversion and stacked four-character set phrases only exist in Chinese, so `readout` keeps them in `references/chinese.md` and loads that file only when the reply is in Chinese.
 
 > [!Note]
-> **TODO**: a set of best-practice examples is coming, using real scenarios to show how these skills compose.
+> **TODO**: a set of best-practice examples is coming, along with an offline consolidation ("dreaming") skill that learns from archived `.long-horizon/` trajectories.
 
 ## References
 

@@ -1,35 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-labelledby="title desc">
-  <title id="title">devai — circle, light</title>
-  <desc id="desc">Circular light badge: black line D graph on warm white with a lit mint agent core.</desc>
+  <title id="title">Rondo — circle, light</title>
+  <desc id="desc">Circular light badge: three expanding eccentric rings tangent to a single refrain anchor on warm white, with a lit terracotta return arc.</desc>
 
   <defs>
-    <radialGradient id="bgCL" gradientUnits="userSpaceOnUse" cx="230" cy="110" r="640">
+    <radialGradient id="bgCL" gradientUnits="userSpaceOnUse" cx="200" cy="140" r="560">
       <stop offset="0" stop-color="#ffffff"/>
-      <stop offset="0.5" stop-color="#fbfaf7"/>
+      <stop offset="0.6" stop-color="#fbfaf7"/>
       <stop offset="1" stop-color="#f2f1eb"/>
     </radialGradient>
   </defs>
 
   <circle cx="256" cy="256" r="256" fill="url(#bgCL)"/>
-  <circle cx="256" cy="256" r="253" fill="none" stroke="#14130f" stroke-opacity="0.1" stroke-width="2"/>
+  <circle cx="256" cy="256" r="253" fill="none" stroke="#1d1c1a" stroke-opacity="0.1" stroke-width="2"/>
 
-  <g fill="none" stroke="#14130f" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
-    <line x1="141" y1="140" x2="141" y2="372"/>
-    <path d="M141 140 H290 L377 256 L290 372 H141"/>
-    <line x1="141" y1="256" x2="377" y2="256"/>
+  <g transform="rotate(-28 256 256)" fill="none" stroke-linecap="round">
+    <circle cx="282" cy="256" r="136" stroke="#1d1c1a" stroke-opacity="0.22" stroke-width="14"/>
+    <circle cx="242" cy="256" r="96" stroke="#1d1c1a" stroke-opacity="0.55" stroke-width="16"/>
+    <circle cx="202" cy="256" r="56" stroke="#1d1c1a" stroke-width="18"/>
+    <path d="M 146 256 A 136 136 0 1 1 378 352" stroke="#c4623f" stroke-width="16"/>
+    <circle cx="146" cy="256" r="28" fill="#fbfaf7" stroke="#1d1c1a" stroke-width="14"/>
+    <circle cx="146" cy="256" r="12" fill="#c4623f"/>
   </g>
-
-  <g fill="url(#bgCL)" stroke="#14130f" stroke-width="17">
-    <circle cx="141" cy="140" r="28"/>
-    <circle cx="141" cy="256" r="28"/>
-    <circle cx="141" cy="372" r="28"/>
-  </g>
-
-  <g fill="#14130f">
-    <circle cx="290" cy="140" r="18"/>
-    <circle cx="290" cy="372" r="18"/>
-  </g>
-
-  <circle cx="377" cy="256" r="43" fill="url(#bgCL)" stroke="#14130f" stroke-width="17"/>
-  <circle cx="377" cy="256" r="16" fill="#2eb69b"/>
 </svg>

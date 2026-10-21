@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="880" height="620" viewBox="0 0 880 620" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" role="img" aria-label="Skill 总览">
-  <title>Skill 总览</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="620" viewBox="0 0 880 620" font-family="system-ui, -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" role="img" aria-label="Rondo Skill 总览">
+  <title>Rondo Skill 总览</title>
   <style>
     .surface { fill: #fcfcfb; stroke: rgba(11,11,11,0.10); }
     .node    { fill: #ffffff; stroke: rgba(11,11,11,0.10); }
