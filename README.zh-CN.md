@@ -1,35 +1,37 @@
 <p align="center">
-  <img src="./assets/logo.svg" width="140" alt="devai">
+  <img src="./assets/logo.svg" width="140" alt="Rondo">
 </p>
 
-# Dev Agent Skills（中文）
+# Rondo（中文）
 
 [English README](./README.md)
 
-这是一组我日常在 agentic engineering 中使用的 dev skills，重点是多智能体驱动的工作模式与长程自主任务。
+**Keep going. Come back better.**
+
+面向长程任务的 agent skills：把目标变成经过验证的结果，把经验变成下一次更好的执行。
 
 ![Skill 总览](./assets/overview.zh-CN.svg)
 
 ## 安装
 
 ```bash
-npx skills@latest add keli-wen/dev-skills
+npx skills@latest add keli-wen/rondo
 ```
 
-这样装进来的是普通 skill，调用时没有命名空间。同一套也可以装成 plugin，此时 skill 归在 `devai` 命名空间下，`handoff` 变成 `devai:handoff`。
+这样装进来的是普通 skill，调用时没有命名空间。同一套也可以装成 plugin，此时 skill 归在 `rondo` 命名空间下，`/long-horizon` 变成 `/rondo:long-horizon`，`/handoff` 变成 `/rondo:handoff`。
 
 Codex：
 
 ```bash
-codex plugin marketplace add keli-wen/dev-skills
-codex plugin add devai@dev-skills
+codex plugin marketplace add keli-wen/rondo
+codex plugin add rondo@rondo
 ```
 
 Claude Code：
 
 ```bash
-claude plugin marketplace add keli-wen/dev-skills
-claude plugin install devai@dev-skills
+claude plugin marketplace add keli-wen/rondo
+claude plugin install rondo@rondo
 ```
 
 全局安装、项目安装和命名空间差异，见[完整安装说明](./INSTALL.zh-CN.md)。

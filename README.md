@@ -1,35 +1,37 @@
 <p align="center">
-  <img src="./assets/logo.svg" width="140" alt="devai">
+  <img src="./assets/logo.svg" width="140" alt="Rondo">
 </p>
 
-# Dev Agent Skills
+# Rondo
 
 [中文版 README](./README.zh-CN.md)
 
-A set of dev skills I use day to day in agentic engineering, focused on multi-agent-driven work modes and long-horizon autonomous tasks.
+**Keep going. Come back better.**
+
+Agent skills for long-horizon work: turn goals into verified results, and lessons into better runs.
 
 ![Skills overview](./assets/overview.svg)
 
 ## Install
 
 ```bash
-npx skills@latest add keli-wen/dev-skills
+npx skills@latest add keli-wen/rondo
 ```
 
-That installs ordinary, unnamespaced skills. The same set is also available as a plugin, where the skills are namespaced under `devai`, so `handoff` becomes `devai:handoff`.
+That installs ordinary, unnamespaced skills. The same set is also available as a plugin, where the skills are namespaced under `rondo`, so `/long-horizon` becomes `/rondo:long-horizon` and `/handoff` becomes `/rondo:handoff`.
 
 Codex:
 
 ```bash
-codex plugin marketplace add keli-wen/dev-skills
-codex plugin add devai@dev-skills
+codex plugin marketplace add keli-wen/rondo
+codex plugin add rondo@rondo
 ```
 
 Claude Code:
 
 ```bash
-claude plugin marketplace add keli-wen/dev-skills
-claude plugin install devai@dev-skills
+claude plugin marketplace add keli-wen/rondo
+claude plugin install rondo@rondo
 ```
 
 See [the installation guide](./INSTALL.md) for global and project installs and namespace behavior.

@@ -1,14 +1,14 @@
 {
-  "name": "devai",
-  "displayName": "Dev Agent Skills",
+  "name": "rondo",
+  "displayName": "Rondo",
   "version": "0.1.5",
-  "description": "Dev skills I use day to day in agentic engineering, focused on multi-agent-driven work modes and long-horizon autonomous tasks. Includes long-horizon, fan-out, handoff, ctx-research, ctx-grill, to-ctx, just-ask, and the lowband and readout modes.",
+  "description": "Agent skills for long-horizon work: turn goals into verified results, and lessons into better runs.",
   "author": {
     "name": "Keli Wen",
     "url": "https://github.com/keli-wen"
   },
-  "homepage": "https://github.com/keli-wen/dev-skills",
-  "repository": "https://github.com/keli-wen/dev-skills",
+  "homepage": "https://github.com/keli-wen/rondo",
+  "repository": "https://github.com/keli-wen/rondo",
   "keywords": [
     "agent-skills",
     "long-horizon",

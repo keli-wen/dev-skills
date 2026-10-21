@@ -1,11 +1,11 @@
 {
-  "name": "dev-skills",
+  "name": "rondo",
   "interface": {
-    "displayName": "Dev Agent Skills"
+    "displayName": "Rondo"
   },
   "plugins": [
     {
-      "name": "devai",
+      "name": "rondo",
       "source": {
         "source": "local",
         "path": "."
