@@ -6,7 +6,7 @@
 
 [中文版 README](./README.zh-CN.md)
 
-**Keep going. Come back better.**
+*In a rondo, the theme returns after every episode — never quite the same.*
 
 Agent skills for long-horizon work: turn goals into verified results, and lessons into better runs.
 
@@ -69,9 +69,9 @@ The board follows one rule: **a fixed template, a data-only refresh**. At admiss
 
 This is the skill I most want to get right, and I am still iterating on it through real work — including one field test that forced a full redesign.
 
-### Come back better: from archived runs to better runs
+### Returning to the theme: from archived runs to better runs
 
-A rondo returns to its main theme after each episode, and each return carries what happened in between. Rondo is built around two halves of that loop: **keep going** inside a run, and **come back better** across runs.
+A rondo returns to its main theme after each episode, and each return carries what happened in between. Rondo is built around both halves of that loop: pushing an episode to verified completion inside a run, and returning to a stronger starting point across runs.
 
 Today, the first half is live and the second half is laying its tracks:
 

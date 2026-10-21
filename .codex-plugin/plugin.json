@@ -17,7 +17,7 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Rondo",
-    "shortDescription": "Keep going. Come back better.",
+    "shortDescription": "Skills for long-horizon work",
     "longDescription": "Agent skills for long-horizon work: turn goals into verified results, and lessons into better runs.",
     "developerName": "Keli Wen",
     "category": "Engineering",

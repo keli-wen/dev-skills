@@ -6,7 +6,7 @@
 
 [English README](./README.md)
 
-**Keep going. Come back better.**
+*In a rondo, the theme returns after every episode — never quite the same.*
 
 面向长程任务的 agent skills：把目标变成经过验证的结果，把经验变成下一次更好的执行。
 
@@ -71,9 +71,9 @@ claude plugin install rondo@rondo
 
 这是我最想做好的一个 skill，目前仍在用自己的真实任务持续迭代——其中一次实测直接推动了整个设计重构。
 
-### Come back better：从运行轨迹到下一次更好的执行
+### 回到母题：从运行轨迹到下一次更好的执行
 
-在音乐里，回旋曲（Rondo）每次走远之后都会回到主题，而每一次回归都带着刚刚经历过的变化。Rondo 这个名字对应的正是这两件事：在一次长跑里**持续推进（Keep going）**，在一次次长跑之间**带着经验回来（Come back better）**。
+在音乐里，回旋曲（Rondo）每次走远之后都会回到母题，而每一次回归都带着刚刚经历过的变化。Rondo 围绕这个闭环的两半展开：在单次长跑里把目标推进到经过验证的结果，在多次长跑之间带着经验回到更高的起点。
 
 目前，前半程已经跑通，后半程正在把地基铺好：
 
