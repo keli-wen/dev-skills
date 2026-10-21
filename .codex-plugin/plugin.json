@@ -17,13 +17,13 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Rondo",
-    "shortDescription": "Skills for long-horizon work",
+    "shortDescription": "Keep going. Come back better.",
     "longDescription": "Agent skills for long-horizon work: turn goals into verified results, and lessons into better runs.",
     "developerName": "Keli Wen",
     "category": "Engineering",
     "capabilities": ["Instructions"],
     "defaultPrompt": [
-      "Use Rondo to turn a goal into verified results with the right skills."
+      "Use Rondo to turn a long-horizon goal into verified results."
     ]
   }
 }
