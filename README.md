@@ -1,12 +1,9 @@
-<p align="center">
-  <img src="./assets/logo.svg" width="140" alt="Rondo">
-</p>
-
-# Rondo
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="./assets/header-light.svg">
+  <img src="./assets/header.svg" width="100%" alt="Rondo: in a rondo, the theme returns after every episode, never quite the same">
+</picture>
 
 [中文版 README](./README.zh-CN.md)
-
-*In a rondo, the theme returns after every episode — never quite the same.*
 
 Agent skills for long-horizon work: turn goals into verified results, and lessons into better runs.
 
