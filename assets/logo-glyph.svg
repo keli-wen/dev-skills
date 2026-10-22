@@ -1,10 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Rondo glyph">
-  <rect width="32" height="32" rx="7.4" fill="#141311"/>
-  <g transform="rotate(-28 16 16)" fill="none" stroke-linecap="round">
-    <circle cx="17.8" cy="16" r="8.6" stroke="#edebe6" stroke-opacity="0.32" stroke-width="1.5"/>
-    <circle cx="15.2" cy="16" r="6" stroke="#edebe6" stroke-opacity="0.68" stroke-width="1.7"/>
-    <circle cx="12.7" cy="16" r="3.5" stroke="#edebe6" stroke-width="1.9"/>
-    <path d="M 9.2 16 A 8.6 8.6 0 1 1 23.9 22.1" stroke="#e07a55" stroke-width="1.7"/>
-    <circle cx="9.2" cy="16" r="2.1" fill="#e07a55"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="32" height="32" role="img" aria-labelledby="t d">
+<title id="t">Rondo</title>
+<desc id="d">One cursive line that loops up and lands back on the baseline: theme, episode, theme.</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0E3036"/><stop offset="1" stop-color="#0A2227"/></linearGradient></defs><rect width="512" height="512" rx="112" fill="url(#bg)"/><path d="M96 372L98.7 372L101.4 372L104.2 372L107.1 372L110.2 371.9L113.4 371.8L116.9 371.7L120.6 371.5L124.6 371.1L128.9 370.7L133.5 370.1L138.4 369.4L143.7 368.4L149.3 367.2L155.3 365.8L161.5 364.1L168.1 362L175 359.7L182.2 357L189.6 353.9L197.2 350.4L205.1 346.5L213 342.1L221.1 337.4L229.2 332.2L237.4 326.5L245.5 320.4L253.5 313.8L261.3 306.9L269 299.5L276.4 291.7L283.5 283.5L290.2 275L296.5 266.2L302.4 257.1L307.8 247.7L312.6 238.2L316.8 228.5L320.5 218.6L323.5 208.8L325.8 198.9L327.5 189.1L328.4 179.4L328.7 169.9L328.3 160.6L327.1 151.6L325.3 142.9L322.9 134.6L319.8 126.8L316.1 119.4L311.8 112.6L307 106.4L301.8 100.8L296.1 95.9L290 91.6L283.6 88.1L276.9 85.4L270.1 83.4L263.1 82.2L256 81.8L248.9 82.2L241.9 83.4L235.1 85.4L228.4 88.1L222 91.6L215.9 95.9L210.2 100.8L205 106.4L200.2 112.6L195.9 119.4L192.2 126.8L189.1 134.6L186.7 142.9L184.9 151.6L183.7 160.6L183.3 169.9L183.6 179.4L184.5 189.1L186.2 198.9L188.5 208.8L191.5 218.6L195.2 228.5L199.4 238.2L204.2 247.7L209.6 257.1L215.5 266.2L221.8 275L228.5 283.5L235.6 291.7L243 299.5L250.7 306.9L258.5 313.8L266.5 320.4L274.6 326.5L282.8 332.2L290.9 337.4L299 342.1L306.9 346.5L314.8 350.4L322.4 353.9L329.8 357L337 359.7L343.9 362L350.5 364.1L356.7 365.8L362.7 367.2L368.3 368.4L373.6 369.4L378.5 370.1L383.1 370.7L387.4 371.1L391.4 371.5L395.1 371.7L398.6 371.8L401.8 371.9L404.9 372L407.8 372L410.6 372L413.3 372L416 372" fill="none" stroke="#F2EEE3" stroke-width="52" stroke-linejoin="round" stroke-linecap="round"/><circle cx="416" cy="372" r="34" fill="#7FE3C4"/>
 </svg>

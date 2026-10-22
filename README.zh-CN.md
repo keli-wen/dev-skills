@@ -1,12 +1,9 @@
-<p align="center">
-  <img src="./assets/logo.svg" width="140" alt="Rondo">
-</p>
-
-# Rondo（中文）
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="./assets/header-light.svg">
+  <img src="./assets/header.svg" width="100%" alt="Rondo: in a rondo, the theme returns after every episode, never quite the same">
+</picture>
 
 [English README](./README.md)
-
-*In a rondo, the theme returns after every episode — never quite the same.*
 
 面向长程任务的 agent skills：把目标变成经过验证的结果，把经验变成下一次更好的执行。
 
